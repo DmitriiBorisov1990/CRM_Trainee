@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Valid_user_tests" verbose="1">
+    <test name="Login form test US 4.1.4.1., 4.1.4.2., 4.1.4.6.">
+        <groups>
+            <run>
+                <include name="valid_user"/>
+                <exclude name="invalid_user"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.andersen.borisov.LoginFormTest"/>
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="External_user_test" verbose="1">
+    <test name="Login form test">
+        <groups>
+            <run>
+                <include name="invalid_user"/>
+                <exclude name="valid_user"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.andersen.borisov.LoginFormTest">
+                <methods>
+                    <include name="checkInvalidDomainNameMessage"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
