@@ -1,4 +1,3 @@
-/*
 
 package com.andersen.borisov;
 import com.andersen.borisov.model.User;
@@ -29,7 +28,7 @@ public class LoginFormTest extends CommonConditions {
                 .fillInEmailWindow(testUserEmptyEmail)
                 .clearEmailField()
                 .fillInPassWindow(testUserEmptyEmail)
-                .getErrorMessageEnterEmailText();
+                .getErrorMessageEnterEmail();
         Assert.assertEquals(EMPTY_EMAIL_FIELD_MESSAGE, emptyFieldMessageText);
     }
 
@@ -41,7 +40,7 @@ public class LoginFormTest extends CommonConditions {
                 .fillInEmailWindow(testUserEmptyPassword)
                 .fillInPassWindow(testUserEmptyPassword)
                 .clearPasswordField()
-                .getErrorMessageEnterPasswordText();
+                .getErrorMessageEnterPassword();
         Assert.assertEquals(emptyFieldMessageText, EMPTY_PASSWORD_FIELD_MESSAGE);
     }
 
@@ -95,4 +94,3 @@ public class LoginFormTest extends CommonConditions {
     }
 }
 
-*/

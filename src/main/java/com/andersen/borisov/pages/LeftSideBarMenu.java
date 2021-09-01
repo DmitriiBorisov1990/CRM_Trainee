@@ -11,12 +11,12 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeftSideBar extends AbstractPage {
+public class LeftSideBarMenu extends AbstractPage {
 
     private final Logger logger = LogManager.getRootLogger();
     private final String BASE_URL = "https://crm-trainee-react-dev.andersenlab.dev/";
 
-    private final By buttonInMenuBar = By.className("sidebar_arrow__2XyM_");
+    //private final By buttonInMenuBar = By.className("sidebar_arrow__2XyM_");
 
     @FindBy(className = "sidebar_top-options__2OuKb")
     private WebElement topLeftSideMenuBarContent;
@@ -24,21 +24,21 @@ public class LeftSideBar extends AbstractPage {
     @FindBy(className = "sidebar_bottom-options__1MQZd")
     private WebElement bottomLeftSideMenuBarContent;
 
-    public LeftSideBar(WebDriver driver) {
+    public LeftSideBarMenu(WebDriver driver) {
         super(driver);
         PageFactory.initElements(this.driver, this);
     }
 
     @Override
-    protected LeftSideBar openPage() {
+    protected LeftSideBarMenu openPage() {
         driver.navigate().to(BASE_URL);
         return this;
     }
 
-    public LeftSideBar clickOnLeftMenuBar() {
+    /*public LeftSideBarMenu clickOnLeftMenuBar() {
         getElement(buttonInMenuBar).click();
-        return new LeftSideBar(driver);
-    }
+        return new LeftSideBarMenu(driver);
+    }*/
 
     public List<String> getTextLeftMenuBar() {
         List<WebElement> elementsSideBarTop = topLeftSideMenuBarContent.findElements(By.className("sidebarOption_wrapper-for-tooltip__3oVHb"));

@@ -27,4 +27,8 @@ public abstract class AbstractPage {
     protected List<WebElement> getElements(By by){
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
     }
+
+    public String getUrl(){
+        return driver.getCurrentUrl();
+    }
 }

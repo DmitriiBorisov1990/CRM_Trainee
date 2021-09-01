@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class LoginPage extends AbstractPage{
+public class LoginPage extends AbstractPage {
 
     private final Logger logger = LogManager.getRootLogger();
     private final String LOGIN_PAGE_URL = "https://crm-trainee-react-dev.andersenlab.dev";
@@ -75,20 +75,16 @@ public class LoginPage extends AbstractPage{
         return new LoginPage(driver);
     }
 
-    public String getUrl() {
-        return driver.getCurrentUrl();
-    }
-
     public LoginPage enterButtonClick() {
-        submitButton.click();
+        submitButton.submit();
         return new LoginPage(driver);
     }
 
-    public String getErrorMessageEnterEmailText() {
+    public String getErrorMessageEnterEmail() {
         return getElement(errorMessageEnterEmailElement).getText();
     }
 
-    public String getErrorMessageEnterPasswordText() {
+    public String getErrorMessageEnterPassword() {
         return getElement(errorMessageEnterPasswordElement).getText();
     }
 
@@ -100,11 +96,11 @@ public class LoginPage extends AbstractPage{
         return getElement(errorMessageInvalidUser).getText();
     }
 
-    public String getErrorMessageInCaseInvalidPassword(){
+    public String getErrorMessageInCaseInvalidPassword() {
         return getElement(errorMessageInvalidPassword).getText();
     }
 
-    public String getErrorMessageAnotherCase(){
+    public String getErrorMessageAnotherCase() {
         return getElement(errorMessageAnotherCase).getText();
     }
 }

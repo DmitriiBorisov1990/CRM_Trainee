@@ -26,7 +26,7 @@ public final class DriverSingleton {
     }
 
     public static void closeWebDriver() {
-        driver.quit();
-        driver = null;
+        /*driver.quit();
+        driver = null;*/
     }
 }
