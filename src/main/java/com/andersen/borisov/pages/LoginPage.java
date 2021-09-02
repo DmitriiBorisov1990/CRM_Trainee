@@ -42,6 +42,11 @@ public class LoginPage extends AbstractPage {
         return this;
     }
 
+    @Override
+    public String getUrl() {
+        return super.getUrl();
+    }
+
     public MainPage login(User user) {
         emailWindow.sendKeys(user.getUserName());
         passWindow.sendKeys(user.getPassword());

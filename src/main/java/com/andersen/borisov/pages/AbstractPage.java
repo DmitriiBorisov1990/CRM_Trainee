@@ -24,11 +24,21 @@ public abstract class AbstractPage {
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
-    protected List<WebElement> getElements(By by){
+    protected List<WebElement> getElements(By by) {
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
     }
 
-    public String getUrl(){
+    protected String getUrl() {
         return driver.getCurrentUrl();
     }
+
+    //TODO
+    /*public <T extends AbstractPage> Object switchHewTab() {
+        new Actions(driver)
+                .sendKeys(driver.findElement(By.tagName("html")), Keys.CONTROL)
+                .sendKeys(driver.findElement(By.tagName("html")), Keys.NUMPAD2)
+                .build()
+                .perform();
+        return new Object();
+    }*/
 }

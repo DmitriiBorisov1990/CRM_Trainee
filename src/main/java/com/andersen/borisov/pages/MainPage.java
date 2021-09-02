@@ -4,12 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainPage extends AbstractPage {
 
@@ -19,7 +14,7 @@ public class MainPage extends AbstractPage {
     private final By buttonOpenLeftMenuBar = By.className("sidebar_arrow__2XyM_");
     private final By myProfileButtonLiftMenuBar = By.xpath("//*[@id='root']//div[2]//div[2]//a");
 
-    private ModalWindow modalWindow;
+    private MyProfileModalWindow modalWindow;
 
     public MainPage(WebDriver driver) {
         super(driver);
@@ -32,10 +27,14 @@ public class MainPage extends AbstractPage {
         return this;
     }
 
-    public MainPage clickToMyProfileButton() {
+    @Override
+    public String getUrl() {
+        return super.getUrl();
+    }
+
+    public MyProfileModalWindow clickToMyProfileButton() {
         getElement(myProfileButtonLiftMenuBar).click();
-        this.modalWindow = new ModalWindow(this.driver);
-        return this;
+        return new MyProfileModalWindow(driver);
     }
 
     public LeftSideBarMenu clickOnLeftMenuBar() {
@@ -46,73 +45,15 @@ public class MainPage extends AbstractPage {
 
     public boolean clickOnLeftSideMenuBarAndExit() {
         getElement(buttonOpenLeftMenuBar).click();
-        clickOnMyProfileInModalWindow();
         boolean result = isLeftMenuBarOpen();
-        exit();
+        new LeftSideBarMenu(this.driver)
+                .clickOnMyProfile()
+                .clickExit();
         return result;
     }
 
     public boolean isLeftMenuBarOpen() {
         String classAttribute = getElement(By.tagName("nav")).getAttribute("class");
         return classAttribute.endsWith("ECnxL");
-    }
-
-    public List<String> getTextModalWindow(){
-        return new ModalWindow(this.driver).getContentModalWindow();
-
-    }
-
-    //TODO
-    public MainPage clickOnMyProfileInModalWindow() {
-        this.modalWindow = new ModalWindow(driver);
-        clickToMyProfileButton();
-        return this;
-    }
-
-    public LoginPage exit() {
-        modalWindow.clickExit();
-        return new LoginPage(driver);
-    }
-
-    class ModalWindow {
-
-        WebDriver driver;
-
-        final By exitButton = By.xpath("//*[text()='Выйти']");
-        final By supportButton = By.xpath("//*[text()='Support']");
-        final By myProfileButton = By.xpath("//*[text()='Мой профиль']");
-
-        final By popUpMenu = By.xpath("//*[@id='root']//nav//div[2]/div[2]/div[2]");
-
-
-        ModalWindow(WebDriver driver) {
-            this.driver = driver;
-        }
-
-        List<String> getContentModalWindow(){
-            List<String> listNamesInModalWindow = new ArrayList<>();
-            WebElement modalWindowElement = getElement(popUpMenu);
-            List<WebElement> elements = modalWindowElement.findElements(By.className("popupMenu_option__3ZD4c"));
-            for(WebElement element : elements){
-                listNamesInModalWindow.add(element.getText());
-            }
-            return listNamesInModalWindow;
-        }
-
-        void clickExit() {
-            getElement(exitButton).click();
-        }
-
-        void clickOnTelegramAdmin() {
-            getElement(myProfileButton).click();
-        }
-
-        void clickOnMyProfileButton() {
-            getElement(myProfileButton).click();
-        }
-
-        void clickOnSupportButton() {
-            getElement(supportButton).click();
-        }
     }
 }

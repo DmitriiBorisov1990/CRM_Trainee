@@ -18,8 +18,8 @@ public class ExitApplicationTest extends CommonConditions {
         String currentUrl = new LoginPage(driver)
                 .openPage()
                 .login(testUser)
-                .clickOnMyProfileInModalWindow()
-                .exit()
+                .clickToMyProfileButton()
+                .clickExit()
                 .getUrl();
         Assert.assertEquals(LOGIN_PAGE_URL, currentUrl);
     }

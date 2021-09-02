@@ -16,17 +16,19 @@ public class LeftSideBarMenu extends AbstractPage {
     private final Logger logger = LogManager.getRootLogger();
     private final String BASE_URL = "https://crm-trainee-react-dev.andersenlab.dev/";
 
-    //private final By buttonInMenuBar = By.className("sidebar_arrow__2XyM_");
-
     @FindBy(className = "sidebar_top-options__2OuKb")
     private WebElement topLeftSideMenuBarContent;
 
     @FindBy(className = "sidebar_bottom-options__1MQZd")
     private WebElement bottomLeftSideMenuBarContent;
 
+    @FindBy(linkText = "Мой Профиль")
+    private WebElement myProfileButton;
+
     public LeftSideBarMenu(WebDriver driver) {
         super(driver);
         PageFactory.initElements(this.driver, this);
+        logger.info("---> Left side menu bar opened");
     }
 
     @Override
@@ -35,10 +37,15 @@ public class LeftSideBarMenu extends AbstractPage {
         return this;
     }
 
-    /*public LeftSideBarMenu clickOnLeftMenuBar() {
-        getElement(buttonInMenuBar).click();
-        return new LeftSideBarMenu(driver);
-    }*/
+    @Override
+    public String getUrl() {
+        return super.getUrl();
+    }
+
+    public MyProfileModalWindow clickOnMyProfile() {
+        myProfileButton.click();
+        return new MyProfileModalWindow(driver);
+    }
 
     public List<String> getTextLeftMenuBar() {
         List<WebElement> elementsSideBarTop = topLeftSideMenuBarContent.findElements(By.className("sidebarOption_wrapper-for-tooltip__3oVHb"));
@@ -48,7 +55,7 @@ public class LeftSideBarMenu extends AbstractPage {
         return resultContent;
     }
 
-    private List<String> addWebElementsInList(List<WebElement> elements){
+    private List<String> addWebElementsInList(List<WebElement> elements) {
         List<String> result = new ArrayList<>();
         for (WebElement element : elements) {
             result.add(element.getText());
