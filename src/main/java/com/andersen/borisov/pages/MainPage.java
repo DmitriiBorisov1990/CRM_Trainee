@@ -14,8 +14,6 @@ public class MainPage extends AbstractPage {
     private final By buttonOpenLeftMenuBar = By.className("sidebar_arrow__2XyM_");
     private final By myProfileButtonLiftMenuBar = By.xpath("//*[@id='root']//div[2]//div[2]//a");
 
-    private MyProfileModalWindow modalWindow;
-
     public MainPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(this.driver, this);
