@@ -1,5 +1,5 @@
 
-package com.andersen.borisov;
+package data_base_driver;
 
 import java.sql.*;
 
