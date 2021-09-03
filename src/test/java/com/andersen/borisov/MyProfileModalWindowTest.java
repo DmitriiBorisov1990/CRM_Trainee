@@ -3,6 +3,7 @@ package com.andersen.borisov;
 import com.andersen.borisov.model.User;
 import com.andersen.borisov.pages.LoginPage;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class MyProfileModalWindowTest extends CommonConditions {
         String telegramCurrentUrl = driver.getCurrentUrl();
         driver.close();
         driver.switchTo().window(activeTabs.get(0));
-                //.getUrl();
         Assert.assertEquals(telegramCurrentUrl,SUPPORT_PAGE_URL);
     }
 
@@ -61,14 +61,12 @@ public class MyProfileModalWindowTest extends CommonConditions {
         String telegramCurrentUrl = driver.getCurrentUrl();
         driver.close();
         driver.switchTo().window(activeTabs.get(0));
-                //.getUrl();
         Assert.assertEquals(telegramCurrentUrl,JIRA_URL);
     }
-
+    @Ignore
     @Test(groups = {"valid_user"}, description = "http://18.196.202.114/login")
     public static void telegramAdminPageAcesTest(){
         User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
-        //String actualResult
                 new LoginPage(driver)
                 .openPage()
                 .login(testUser)
@@ -79,7 +77,6 @@ public class MyProfileModalWindowTest extends CommonConditions {
         String telegramCurrentUrl = driver.getCurrentUrl();
         driver.close();
         driver.switchTo().window(activeTabs.get(0));
-                //.getUrl();
         Assert.assertEquals(telegramCurrentUrl,TELEGRAM_ADMIN);
     }
 }

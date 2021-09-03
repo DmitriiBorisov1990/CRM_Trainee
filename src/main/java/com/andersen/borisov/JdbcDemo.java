@@ -1,8 +1,6 @@
 
 package com.andersen.borisov;
 
-import lombok.SneakyThrows;
-
 import java.sql.*;
 
 public class JdbcDemo {

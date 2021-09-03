@@ -69,13 +69,6 @@ public class MyProfileModalWindow extends AbstractPage {
         return new JiraPage(driver);
     }
 
-
-    //TODO
-    public MyProfilePage clickOnMyProfileButton() {
-        getElement(myProfileButton).click();
-        return new MyProfilePage(driver);
-    }
-
     public SupportPage clickOnSupportButton() {
         getElement(supportButton).click();
         return new SupportPage(driver);

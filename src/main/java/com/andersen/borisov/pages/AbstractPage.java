@@ -31,14 +31,4 @@ public abstract class AbstractPage {
     protected String getUrl() {
         return driver.getCurrentUrl();
     }
-
-    //TODO
-    /*public <T extends AbstractPage> Object switchHewTab() {
-        new Actions(driver)
-                .sendKeys(driver.findElement(By.tagName("html")), Keys.CONTROL)
-                .sendKeys(driver.findElement(By.tagName("html")), Keys.NUMPAD2)
-                .build()
-                .perform();
-        return new Object();
-    }*/
 }
