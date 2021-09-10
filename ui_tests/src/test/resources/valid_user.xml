@@ -9,7 +9,7 @@
             </run>
         </groups>
         <classes>
-            <class name="com.andersen.borisov.LoginFormTest"/>
+            <class name="tests.LoginFormTest"/>
         </classes>
     </test>
 </suite>
