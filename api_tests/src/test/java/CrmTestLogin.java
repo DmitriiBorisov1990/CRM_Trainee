@@ -3,7 +3,6 @@ import io.restassured.response.ValidatableResponse;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import utils.api.Authorization;
-import utils.data.JsonObjectHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,6 @@ public class CrmTestLogin {
     static void getUserById() {
 
         ValidatableResponse response;
-        String getUserByIdRequestBody = JsonObjectHelper.generateJsonForLogin();
         Map<String,String> map = new HashMap<>();
         map.put("Authorization","CRM_HA "+ Authorization.JSESSIONID);
         given()
