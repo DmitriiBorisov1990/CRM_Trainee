@@ -21,7 +21,6 @@ public class PropertiesManager {
         }
     }
 
-
     public static String get(String key) {
         return properties.getProperty(key);
     }
