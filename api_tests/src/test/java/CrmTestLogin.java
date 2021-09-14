@@ -27,10 +27,10 @@ public class CrmTestLogin {
                 .header("Content-type", ContentType.JSON)
                 .headers(map)
                 .accept(ContentType.JSON)
-                .get("http://10.10.15.160:8080/api/users/70009")
+                .get("http://10.10.15.160:8080/api/users/70000")
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("firstNameRu",equalTo("Андрей"));
+                .body("firstNameRu",equalTo("Пользователь"));
     }
 }
