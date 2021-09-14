@@ -1,6 +1,6 @@
 package utils.api;
 
-import entity.token_controller.Token;
+import controllers.token_controller.Token;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.testng.log4testng.Logger;

@@ -1,4 +1,4 @@
-package entity.token_controller;
+package controllers.token_controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
 package data_base;
 
+import dao.UserDao;
 import lombok.SneakyThrows;
 import utils.ConnectionManager;
 
@@ -7,14 +8,13 @@ import java.sql.*;
 
 public class DataBase {
 
-    private static final String GET_USER_BY_ID = "SELECT *" + "FROM user " + "WHERE id = ?";
-    private static final String GET_ALL_USERS = "SELECT* FROM user";
     private static final String CREATE_USER = "INSERT INTO user (first_name_ru,last_name_ru,first_name_en,last_name_en,corporate_email)" +
             "VALUES(?,?,?,?,?)";
 
     public static void main(String[] args) throws SQLException {
-        getUserBiId(createUser("Оззи", "Осборн", "Ozzy", "Osbourne", "o.osbourne@andersenlab.com"));
-        //getUserBiId(70173);
+        //createUser("Оззи", "Осборн", "Ozzy", "Osbourne", "o.osbourne@andersenlab.com"));
+        loadDriver();
+        UserDao.getInstance().getOne(70172).ifPresent(System.out::println);
     }
 
     @SneakyThrows
@@ -39,43 +39,6 @@ public class DataBase {
             }
         }
         return id;
-    }
-
-    @SneakyThrows
-    static void getUserBiId(int id) {
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2) + " " + resultSet.getString(3) + " " + resultSet.getString(4));
-            }
-        }
-    }
-
-    @SneakyThrows
-    static PreparedStatement preparedStatementObject(String query) {
-        try (Connection connection = ConnectionManager.get()) {
-            return connection.prepareStatement(query);
-        }
-    }
-
-    static void updateUser() {
-    }
-
-    static void deleteUser() {
-    }
-
-    static void getUserRoleByUserId() {
-    }
-
-    static void getCurrentUser() {
-    }
-
-    static void getAllExternalUsers() {
-    }
-
-    static void getIdApUsers() {
     }
 
     @SneakyThrows
