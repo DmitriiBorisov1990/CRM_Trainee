@@ -1,4 +1,4 @@
-package entity.location_controller.office;
+package controllers.location_controller.office;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

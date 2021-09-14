@@ -1,4 +1,4 @@
-package entity.location_controller.country;
+package controllers.location_controller.country;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
