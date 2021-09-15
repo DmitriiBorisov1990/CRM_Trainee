@@ -3,7 +3,7 @@ package entity;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.sql.Date;
 
 @Data
 @Builder
@@ -20,6 +20,6 @@ public class User {
     private String phone;
     private String status; // Enum генерируется на сервере
     private Role role;
-    private Date createDate;
+    private Date createDate; // дата создания пользователя на сервере
     private Office office;
 }
