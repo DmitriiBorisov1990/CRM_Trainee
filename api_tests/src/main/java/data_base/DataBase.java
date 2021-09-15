@@ -1,46 +1,55 @@
 package data_base;
 
 import dao.UserDao;
+import entity.Office;
+import entity.Role;
+import entity.User;
 import lombok.SneakyThrows;
-import utils.ConnectionManager;
 
-import java.sql.*;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 public class DataBase {
 
-    private static final String CREATE_USER = "INSERT INTO user (first_name_ru,last_name_ru,first_name_en,last_name_en,corporate_email)" +
-            "VALUES(?,?,?,?,?)";
-
-    public static void main(String[] args) throws SQLException {
-        //createUser("Оззи", "Осборн", "Ozzy", "Osbourne", "o.osbourne@andersenlab.com"));
+    public static void main(String[] args) {
         loadDriver();
-        UserDao.getInstance().getOne(70172).ifPresent(System.out::println);
+        UserDao.getInstance()
+                .getOne(70183)
+                .map(peek(it ->it.setPhone("777-77-77")))
+                .ifPresent(UserDao.getInstance()::update);
     }
 
-    @SneakyThrows
-    static int createUser(String firstNameRu, String lastNameRu, String firstNameEn, String lastNameEn, String corporateEmail) {
-        int id = 0;
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, firstNameRu);
-            preparedStatement.setString(2, lastNameRu);
-            preparedStatement.setString(3, firstNameEn);
-            preparedStatement.setString(4, lastNameEn);
-            preparedStatement.setString(5, corporateEmail);
-            //preparedStatement.setString(5,strings[4]);
-            //preparedStatement.setString(6,strings[5]);
-            int insertedRows = preparedStatement.executeUpdate();
-            if (insertedRows != 1) {
-                throw new SQLException();
-            }
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                id = generatedKeys.getInt(1);
-            }
-        }
-        return id;
+    //TODO
+    private static void testSaveUser(){
+        User user = UserDao.getInstance().saveUser(User.builder()
+                        .firstNameRu("Дмитрий")
+                        .lastNameRu("Борисов")
+                        .firstNameEn("Dmitrii")
+                        .lastNameEn("Borisov")
+                        //.birthday()
+                        .skype("@skype")
+                        .corporateEmail("d.barysay@andersenlab.com")
+                        .phone("123-34-56")
+                        .role(Role.builder()
+                                .id(1001)
+                                .build())
+                        .office(Office.builder()
+                                .id(1)
+                                .build())
+                .build());
+        System.out.println(user.getId());
     }
 
+    public static <T> UnaryOperator<T> peek(Consumer<T> consumer){
+        return object -> {
+            consumer.accept(object);
+            return object;
+        };
+    }
+
+    private static void testDeleteUser(){
+        System.out.println(UserDao.getInstance().deleteUser(70180));
+    }
     @SneakyThrows
     private static void loadDriver() {
         Class.forName("com.mysql.cj.jdbc.Driver");

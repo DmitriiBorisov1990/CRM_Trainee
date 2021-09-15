@@ -1,5 +1,7 @@
 package dao;
 
+import entity.Office;
+import entity.Role;
 import entity.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -11,21 +13,36 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Optional;
 
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserDao {
 
     private static final UserDao INSTANCE = new UserDao();
     private static final String FIND_ONE = "SELECT *" + "FROM user " + "WHERE id = ?";
+    private static final String DELETE_BY_ID = "DELETE" + " FROM user " + "WHERE id = ?";
+    private static final String SAVE = "INSERT INTO user" +
+            "(first_name_ru,last_name_ru,first_name_en,last_name_en,skype,corporate_email,phone,role_id,office_id)" +
+            "VALUES(?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE user " +
+            "SET first_name_ru = ?,last_name_ru = ?,first_name_en = ?,last_name_en = ?,skype = ?,corporate_email = ?,phone = ?,role_id = ?,office_id = ? " +
+            "WHERE id = ?";
 
-    @SneakyThrows
-    public Optional<User> getOne(int id){
+
+    /**
+     * @param id search User by id
+     * @return User Object
+     * @Description swagger  /users/{id} Get user by id;
+     **/
+    @SneakyThrows //TODO
+    public Optional<User> getOne(Integer id) {
         User user = null;
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ONE)) {
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-               user = User.builder()
+            while (resultSet.next()) {
+                user = User.builder()
                         .id(resultSet.getInt("id"))
                         .firstNameRu(resultSet.getString("first_name_ru"))
                         .lastNameRu(resultSet.getString("last_name_ru"))
@@ -56,10 +73,67 @@ public class UserDao {
         return Optional.ofNullable(user);
     }
 
-    static void updateUser() {
+    /**
+     * @param user search User by id
+     * @return User Object
+     **/
+    @SneakyThrows
+    public User saveUser(User user) {
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(SAVE, RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, user.getFirstNameRu());
+            preparedStatement.setString(2, user.getLastNameRu());
+            preparedStatement.setString(3, user.getFirstNameEn());
+            preparedStatement.setString(4, user.getLastNameEn());
+            //preparedStatement.setDate(5,user.getBirthday());
+            preparedStatement.setString(5, user.getSkype());
+            preparedStatement.setString(6, user.getCorporateEmail());
+            preparedStatement.setString(7, user.getPhone());
+            preparedStatement.setObject(8, Optional
+                    .ofNullable(user.getRole()).map(Role::getId).orElse(null));
+            preparedStatement.setObject(9, Optional.ofNullable(user.getOffice()).map(Office::getId).orElse(null));
+            if (preparedStatement.executeUpdate() == 1) {
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    user.setId(generatedKeys.getInt(1));
+                }
+            }
+        }
+        return user;
     }
 
-    static void deleteUser() {
+    @SneakyThrows
+    public boolean deleteUser(Integer id) {
+        boolean result = false;
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            if (preparedStatement.executeUpdate() == 1) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @SneakyThrows
+    public User update(User user) {
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
+            preparedStatement.setString(1, user.getFirstNameRu());
+            preparedStatement.setString(2, user.getLastNameRu());
+            preparedStatement.setString(3, user.getFirstNameEn());
+            preparedStatement.setString(4, user.getLastNameEn());
+            //preparedStatement.setDate(5,user.getBirthday());
+            preparedStatement.setString(5, user.getSkype());
+            preparedStatement.setString(6, user.getCorporateEmail());
+            preparedStatement.setString(7, user.getPhone());
+            preparedStatement.setObject(8, Optional
+                    .ofNullable(user.getRole()).map(Role::getId).orElse(null));
+            preparedStatement.setObject(9, Optional.ofNullable(user.getOffice()).map(Office::getId).orElse(null));
+            preparedStatement.setInt(10,user.getId());
+            preparedStatement.executeUpdate();
+        }
+        return user;
     }
 
     static void getUserRoleByUserId() {
@@ -74,6 +148,10 @@ public class UserDao {
     static void getIdApUsers() {
     }
 
+    /**
+     * @return instance UserDao
+     * @Noparam method
+     */
     public static UserDao getInstance() {
         return INSTANCE;
     }
