@@ -86,26 +86,26 @@ public class LoginPage extends AbstractPage {
     }
 
     public String getErrorMessageEnterEmail() {
-        return getElement(errorMessageEnterEmailElement).getText();
+        return getElementWithTimeOut(errorMessageEnterEmailElement).getText();
     }
 
     public String getErrorMessageEnterPassword() {
-        return getElement(errorMessageEnterPasswordElement).getText();
+        return getElementWithTimeOut(errorMessageEnterPasswordElement).getText();
     }
 
     public String getErrorMessageInvalidEmailDomain() {
-        return getElement(errorMessageInvalidDomainName).getText();
+        return getElementWithTimeOut(errorMessageInvalidDomainName).getText();
     }
 
     public String getErrorMessageNoSuchUser() {
-        return getElement(errorMessageInvalidUser).getText();
+        return getElementWithTimeOut(errorMessageInvalidUser).getText();
     }
 
     public String getErrorMessageInCaseInvalidPassword() {
-        return getElement(errorMessageInvalidPassword).getText();
+        return getElementWithTimeOut(errorMessageInvalidPassword).getText();
     }
 
     public String getErrorMessageAnotherCase() {
-        return getElement(errorMessageAnotherCase).getText();
+        return getElementWithTimeOut(errorMessageAnotherCase).getText();
     }
 }

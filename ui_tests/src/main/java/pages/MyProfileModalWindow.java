@@ -41,7 +41,7 @@ public class MyProfileModalWindow extends AbstractPage {
 
     List<String> getContentModalWindow() {
         List<String> listNamesInModalWindow = new ArrayList<>();
-        WebElement modalWindowElement = getElement(popUpMenu);
+        WebElement modalWindowElement = getElementWithTimeOut(popUpMenu);
         List<WebElement> elements = modalWindowElement.findElements(By.className("popupMenu_option__3ZD4c"));
         for (WebElement element : elements) {
             listNamesInModalWindow.add(element.getText());
@@ -50,7 +50,7 @@ public class MyProfileModalWindow extends AbstractPage {
     }
 
     public LoginPage clickExit() {
-        getElement(exitButton).click();
+        getElementWithTimeOut(exitButton).click();
         return new LoginPage(driver);
     }
 
@@ -60,17 +60,17 @@ public class MyProfileModalWindow extends AbstractPage {
     }
 
     public TelegramAdminPage clickOnTelegramAdminButton() {
-        getElement(telegramButton).click();
+        getElementWithTimeOut(telegramButton).click();
         return new TelegramAdminPage(driver);
     }
 
     public JiraPage clickOnJiraButton() {
-        getElement(jiraButton).click();
+        getElementWithTimeOut(jiraButton).click();
         return new JiraPage(driver);
     }
 
     public SupportPage clickOnSupportButton() {
-        getElement(supportButton).click();
+        getElementWithTimeOut(supportButton).click();
         return new SupportPage(driver);
     }
 }

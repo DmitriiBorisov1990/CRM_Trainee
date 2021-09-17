@@ -33,18 +33,18 @@ public class MainPage extends AbstractPage {
     }
 
     public MyProfileModalWindow clickToMyProfileButton() {
-        getElement(myProfileButtonLiftMenuBar).click();
+        getElementWithTimeOut(myProfileButtonLiftMenuBar).click();
         return new MyProfileModalWindow(driver);
     }
 
     public LeftSideBarMenu clickOnLeftMenuBar() {
-        getElement(buttonOpenLeftMenuBar).click();
+        getElementWithTimeOut(buttonOpenLeftMenuBar).click();
         logger.info("---> Click on menu bar");
         return new LeftSideBarMenu(driver);
     }
 
     public boolean clickOnLeftSideMenuBarAndExit() {
-        getElement(buttonOpenLeftMenuBar).click();
+        getElementWithTimeOut(buttonOpenLeftMenuBar).click();
         boolean result = isLeftMenuBarOpen();
         new LeftSideBarMenu(this.driver)
                 .clickOnMyProfile()
@@ -53,7 +53,7 @@ public class MainPage extends AbstractPage {
     }
 
     public boolean isLeftMenuBarOpen() {
-        String classAttribute = getElement(By.tagName("nav")).getAttribute("class");
+        String classAttribute = getElementWithTimeOut(By.tagName("nav")).getAttribute("class");
         return classAttribute.endsWith("ECnxL");
     }
 }

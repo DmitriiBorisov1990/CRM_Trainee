@@ -20,7 +20,7 @@ public abstract class AbstractPage {
 
     protected final int WAIT_TIMEOUT_SECONDS = 10;
 
-    protected WebElement getElement(By by) {
+    protected WebElement getElementWithTimeOut(By by) {
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
