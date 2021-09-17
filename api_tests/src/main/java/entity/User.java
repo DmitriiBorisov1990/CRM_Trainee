@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -14,7 +15,7 @@ public class User {
     private String lastNameRu;
     private String firstNameEn;
     private String lastNameEn;
-    private Date birthday;
+    private LocalDate birthday;
     private String skype;
     private String corporateEmail;
     private String phone;

@@ -14,7 +14,7 @@ public class PropertiesManager {
     private static Properties properties = new Properties();
 
     static {
-        try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get("api_tests/src/main/resources", "application.properties"))) {
+        try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get("src/main/resources", "application.properties"))) {
             properties.load(bufferedReader);
         } catch (IOException e) {
             e.printStackTrace();

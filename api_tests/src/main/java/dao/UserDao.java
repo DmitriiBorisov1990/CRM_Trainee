@@ -9,8 +9,10 @@ import lombok.SneakyThrows;
 import utils.ConnectionManager;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -22,10 +24,10 @@ public class UserDao {
     private static final String FIND_ONE = "SELECT *" + "FROM user " + "WHERE id = ?";
     private static final String DELETE_BY_ID = "DELETE" + " FROM user " + "WHERE id = ?";
     private static final String SAVE = "INSERT INTO user" +
-            "(first_name_ru,last_name_ru,first_name_en,last_name_en,skype,corporate_email,phone,role_id,office_id)" +
-            "VALUES(?,?,?,?,?,?,?,?,?)";
+            "(first_name_ru,last_name_ru,first_name_en,last_name_en,birthday,skype,corporate_email,phone,role_id,office_id)" +
+            "VALUES(?,?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE = "UPDATE user " +
-            "SET first_name_ru = ?,last_name_ru = ?,first_name_en = ?,last_name_en = ?,skype = ?,corporate_email = ?,phone = ?,role_id = ?,office_id = ? " +
+            "SET first_name_ru = ?,last_name_ru = ?,first_name_en = ?,last_name_en = ?,birthday = ?,skype = ?,corporate_email = ?,phone = ?,role_id = ?,office_id = ? " +
             "WHERE id = ?";
 
 
@@ -34,7 +36,7 @@ public class UserDao {
      * @return User Object
      * @Description swagger  /users/{id} Get user by id;
      **/
-    @SneakyThrows //TODO
+    @SneakyThrows
     public Optional<User> getOne(Integer id) {
         User user = null;
         try (Connection connection = ConnectionManager.get();
@@ -48,25 +50,18 @@ public class UserDao {
                         .lastNameRu(resultSet.getString("last_name_ru"))
                         .firstNameEn(resultSet.getString("first_name_en"))
                         .lastNameEn(resultSet.getString("last_name_en"))
-                        .birthday(resultSet.getDate("birthday"))
+                        .birthday(transformDate(resultSet.getDate("birthday")))
                         .skype(resultSet.getString("skype"))
                         .corporateEmail(resultSet.getString("corporate_email"))
                         .phone(resultSet.getString("phone"))
                         .status(resultSet.getString("status"))
-                        /*.role(Role.builder()
+                        .role(Role.builder()
                                 .id(resultSet.getInt("role_id"))
-                                .roleName(resultSet.getString("role_name"))
-                                .descriptionRu(resultSet.getString("description_ru"))
-                                .descriptionEn(resultSet.getString("description_en"))
-                                .build())*/
+                                .build())
                         .createDate(resultSet.getDate("created_date"))
-                        /*.office(Office.builder()
+                        .office(Office.builder()
                                 .id(resultSet.getInt("office_id"))
-                                .city(City.builder()
-                                        .id(resultSet.getInt("city_id"))
-                                        .postIndex()
-                                        .build())
-                                .build())*/
+                                .build())
                         .build();
             }
         }
@@ -85,13 +80,13 @@ public class UserDao {
             preparedStatement.setString(2, user.getLastNameRu());
             preparedStatement.setString(3, user.getFirstNameEn());
             preparedStatement.setString(4, user.getLastNameEn());
-            //preparedStatement.setDate(5,user.getBirthday());
-            preparedStatement.setString(5, user.getSkype());
-            preparedStatement.setString(6, user.getCorporateEmail());
-            preparedStatement.setString(7, user.getPhone());
-            preparedStatement.setObject(8, Optional
+            preparedStatement.setDate(5, Date.valueOf(user.getBirthday()));
+            preparedStatement.setString(6, user.getSkype());
+            preparedStatement.setString(7, user.getCorporateEmail());
+            preparedStatement.setString(8, user.getPhone());
+            preparedStatement.setObject(9, Optional
                     .ofNullable(user.getRole()).map(Role::getId).orElse(null));
-            preparedStatement.setObject(9, Optional.ofNullable(user.getOffice()).map(Office::getId).orElse(null));
+            preparedStatement.setObject(10, Optional.ofNullable(user.getOffice()).map(Office::getId).orElse(null));
             if (preparedStatement.executeUpdate() == 1) {
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
@@ -123,17 +118,21 @@ public class UserDao {
             preparedStatement.setString(2, user.getLastNameRu());
             preparedStatement.setString(3, user.getFirstNameEn());
             preparedStatement.setString(4, user.getLastNameEn());
-            //preparedStatement.setDate(5,user.getBirthday());
-            preparedStatement.setString(5, user.getSkype());
-            preparedStatement.setString(6, user.getCorporateEmail());
-            preparedStatement.setString(7, user.getPhone());
-            preparedStatement.setObject(8, Optional
+            preparedStatement.setDate(5,Date.valueOf(user.getBirthday()));
+            preparedStatement.setString(6, user.getSkype());
+            preparedStatement.setString(7, user.getCorporateEmail());
+            preparedStatement.setString(8, user.getPhone());
+            preparedStatement.setObject(9, Optional
                     .ofNullable(user.getRole()).map(Role::getId).orElse(null));
-            preparedStatement.setObject(9, Optional.ofNullable(user.getOffice()).map(Office::getId).orElse(null));
-            preparedStatement.setInt(10,user.getId());
+            preparedStatement.setObject(10, Optional.ofNullable(user.getOffice()).map(Office::getId).orElse(null));
+            preparedStatement.setInt(11, user.getId());
             preparedStatement.executeUpdate();
         }
         return user;
+    }
+
+    private LocalDate transformDate(Date date) {
+        return date.toLocalDate();
     }
 
     static void getUserRoleByUserId() {
