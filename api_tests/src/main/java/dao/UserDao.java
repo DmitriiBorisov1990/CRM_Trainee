@@ -33,11 +33,11 @@ public class UserDao {
 
     /**
      * @param id search User by id
-     * @return User Object
+     * @return Optional user
      * @Description swagger  /users/{id} Get user by id;
      **/
     @SneakyThrows
-    public Optional<User> getOne(Integer id) {
+    public Optional<User> getOne(int id) {
         User user = null;
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ONE)) {
@@ -69,7 +69,7 @@ public class UserDao {
     }
 
     /**
-     * @param user search User by id
+     * @param user create User
      * @return User Object
      **/
     @SneakyThrows
@@ -97,8 +97,12 @@ public class UserDao {
         return user;
     }
 
+    /**
+     * @param id delete User by id
+     * @return boolean result
+     **/
     @SneakyThrows
-    public boolean deleteUser(Integer id) {
+    public boolean deleteUser(int id) {
         boolean result = false;
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)) {
@@ -110,6 +114,10 @@ public class UserDao {
         return result;
     }
 
+    /**
+     * @param user
+     * @return User object after update
+     **/
     @SneakyThrows
     public User update(User user) {
         try (Connection connection = ConnectionManager.get();
@@ -118,7 +126,7 @@ public class UserDao {
             preparedStatement.setString(2, user.getLastNameRu());
             preparedStatement.setString(3, user.getFirstNameEn());
             preparedStatement.setString(4, user.getLastNameEn());
-            preparedStatement.setDate(5,Date.valueOf(user.getBirthday()));
+            preparedStatement.setDate(5, Date.valueOf(user.getBirthday()));
             preparedStatement.setString(6, user.getSkype());
             preparedStatement.setString(7, user.getCorporateEmail());
             preparedStatement.setString(8, user.getPhone());
@@ -133,18 +141,6 @@ public class UserDao {
 
     private LocalDate transformDate(Date date) {
         return date.toLocalDate();
-    }
-
-    static void getUserRoleByUserId() {
-    }
-
-    static void getCurrentUser() {
-    }
-
-    static void getAllExternalUsers() {
-    }
-
-    static void getIdApUsers() {
     }
 
     /**

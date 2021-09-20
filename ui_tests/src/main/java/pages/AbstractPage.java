@@ -6,8 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
-
 public abstract class AbstractPage {
 
     protected WebDriver driver;
@@ -22,10 +20,6 @@ public abstract class AbstractPage {
 
     protected WebElement getElementWithTimeOut(By by) {
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfElementLocated(by));
-    }
-
-    protected List<WebElement> getElements(By by) {
-        return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
     }
 
     protected String getUrl() {

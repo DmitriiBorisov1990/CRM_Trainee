@@ -10,20 +10,20 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class ApiTest {
-private static final Logger logger = LogManager.getLogger(ApiTest.class);
+    private static final Logger logger = LogManager.getLogger(ApiTest.class);
 
-    /*@Test
+    @Test
     public static void firstTest(){
         logger.info("INFO");
         logger.debug("DEBUG");
         logger.error("ERROR");
         logger.fatal("FATAL");
         logger.warn("WARN");
-    }*/
+    }
 
     @Test
-    public static void test_01(){
-       Response response = get("https://reqres.in/api/users?page=2");
+    public void test_01() {
+        Response response = get("https://reqres.in/api/users?page=2");
         System.out.println(response.getHeader("content-type"));
         //System.out.println(response.getTime());
         System.out.println(response.getBody().prettyPrint());
@@ -32,7 +32,7 @@ private static final Logger logger = LogManager.getLogger(ApiTest.class);
     }
 
     @Test
-    public static void test_02(){
+    public void test_02() {
         System.out.println(given()
                 .get("https://reqres.in/api/users?page=2")
                 .then()
@@ -41,12 +41,12 @@ private static final Logger logger = LogManager.getLogger(ApiTest.class);
 
     //https://crm-trainee-react-dev.andersenlab.dev/login
     @Test
-    public static void test(){
+    public void test() {
         given()
                 .get("https://reqres.in/api/users?page=2")
                 .then()
                 .statusCode(200)
-                .body("data.id[0]",equalTo(7))
+                .body("data.id[0]", equalTo(7))
                 .log()
                 .all();
     }
