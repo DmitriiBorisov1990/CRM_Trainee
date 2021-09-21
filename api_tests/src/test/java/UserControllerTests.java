@@ -1,4 +1,4 @@
-import controllers.user_controller.UserControllerResponse;
+import controllers.user_controller.UserController;
 import dao.UserDao;
 import lombok.SneakyThrows;
 import org.testng.annotations.BeforeTest;
@@ -7,13 +7,12 @@ import utils.api.Authorization;
 import utils.json.JsonObjectHelper;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static utils.HttpHelper.requestHeaderFieldPutKey;
 
 public class UserControllerTests {
 
@@ -54,19 +53,13 @@ public class UserControllerTests {
 
         String jsonResponse = given()
                 .header("Content-type", JSON)
-                .headers(requestHeaderField("Authorization", "CRM_HA " + Authorization.JSESSIONID))
+                .headers(requestHeaderFieldPutKey("Authorization", "CRM_HA " + Authorization.JSESSIONID))
                 .accept(JSON)
                 .get(REQUEST_URL + "70205")
                 .then().statusCode(200).contentType(JSON).extract().asString();
-        UserControllerResponse testUserObject = JsonObjectHelper.generateJsonToObject(jsonResponse, UserControllerResponse.class);
+        UserController testUserObject = JsonObjectHelper.generateJsonToObject(jsonResponse, UserController.class);
         //System.out.println(testUserObject.toString() + "\n" + testUser);
         //Assert.assertTrue(UserDao.getInstance().deleteUser(70203));
-    }
-
-    private static Map<String, String> requestHeaderField(String key, String value) {
-        Map<String, String> result = new HashMap<>();
-        result.put(key, value);
-        return result;
     }
 
     private static LocalDate dateOfBirthday(int year, int month, int day) {

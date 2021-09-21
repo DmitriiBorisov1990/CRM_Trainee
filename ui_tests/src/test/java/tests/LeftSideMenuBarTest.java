@@ -1,16 +1,16 @@
 package tests;
 
 import model.User;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.LoginPage;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.testng.Assert.assertEquals;
+
 public class LeftSideMenuBarTest extends CommonConditions {
 
-    //TODO
     @Test(groups = {"valid_user"}, description = "ЮС 5.1.3.")
     public static void testLeftMenuBarContentTest() {
         List<String> namesList = Arrays.asList(
@@ -23,8 +23,7 @@ public class LeftSideMenuBarTest extends CommonConditions {
                 .login(testUser)
                 .clickOnLeftMenuBar()
                 .getTextLeftMenuBar();
-        System.out.println(namesList + "\n" + resultNamesList);
-        Assert.assertEquals(namesList, resultNamesList);
+        assertEquals(namesList, resultNamesList);
     }
 
     @Test(groups = {"valid_user"}, description = "ЮС 5.1.6.")
@@ -41,6 +40,6 @@ public class LeftSideMenuBarTest extends CommonConditions {
                 .openPage()
                 .login(testUser)
                 .isLeftMenuBarOpen();
-        Assert.assertEquals(flagLeftSideMenuBarIsOpen, actualResult);
+        assertEquals(flagLeftSideMenuBarIsOpen, actualResult);
     }
 }

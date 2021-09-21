@@ -1,9 +1,9 @@
 package pages;
 
+import driver.WaitHelper;
 import model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,15 +21,11 @@ public class LoginPage extends AbstractPage {
     @FindBy(id = "pass")
     private WebElement passWindow;
 
-    @FindBy(xpath = "//*[@id='root']//form/button")
+    @FindBy(xpath = "//button[text()='Войти' and @type='submit']")
     private WebElement submitButton;
 
-    private final By errorMessageEnterEmailElement = By.xpath("//*[@id='root']//form/div[1]/div/span");
-    private final By errorMessageInvalidDomainName = By.xpath("//*[@id='root']//form/div[1]/div/span");
-    private final By errorMessageEnterPasswordElement = By.xpath("//*[@id='root']//form/div[2]/div[2]/span");
-    private final By errorMessageInvalidPassword = By.xpath("//*[text()='Пароль или логин введен неверно']");
-    private final By errorMessageAnotherCase = By.xpath("//*[text()='Произошла ошибка. Обновите страницу или зайдите позже']");
-    private final By errorMessageInvalidUser = By.xpath("//*[text()='Такой пользователь отсутствует в списке пользователей CRM Trainee']");
+    @FindBy(xpath = "//*[contains(@class,'login_error-message')]")
+    private WebElement errorMessage;
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -48,7 +44,7 @@ public class LoginPage extends AbstractPage {
     }
 
     public MainPage login(User user) {
-        emailWindow.sendKeys(user.getUserName());
+        emailWindow.sendKeys(user.getUserEmail());
         passWindow.sendKeys(user.getPassword());
         submitButton.click();
         logger.info("---> On login page");
@@ -56,7 +52,7 @@ public class LoginPage extends AbstractPage {
     }
 
     public LoginPage fillInEmailWindow(User user) {
-        emailWindow.sendKeys(user.getUserName());
+        emailWindow.sendKeys(user.getUserEmail());
         return new LoginPage(driver);
     }
 
@@ -86,26 +82,28 @@ public class LoginPage extends AbstractPage {
     }
 
     public String getErrorMessageEnterEmail() {
-        return getElementWithTimeOut(errorMessageEnterEmailElement).getText();
+        return errorMessage.getText();
     }
 
     public String getErrorMessageEnterPassword() {
-        return getElementWithTimeOut(errorMessageEnterPasswordElement).getText();
+        return errorMessage.getText();
     }
 
     public String getErrorMessageInvalidEmailDomain() {
-        return getElementWithTimeOut(errorMessageInvalidDomainName).getText();
+        return errorMessage.getText();
     }
 
     public String getErrorMessageNoSuchUser() {
-        return getElementWithTimeOut(errorMessageInvalidUser).getText();
+        WaitHelper.waitForTextToAppear(driver, "Такой пользователь отсутствует в списке пользователей CRM Trainee", errorMessage);
+        return errorMessage.getText();
     }
 
     public String getErrorMessageInCaseInvalidPassword() {
-        return getElementWithTimeOut(errorMessageInvalidPassword).getText();
+        WaitHelper.waitForTextToAppear(driver, "Пароль или логин введен неверно", errorMessage);
+        return errorMessage.getText();
     }
 
     public String getErrorMessageAnotherCase() {
-        return getElementWithTimeOut(errorMessageAnotherCase).getText();
+        return errorMessage.getText();
     }
 }

@@ -1,12 +1,13 @@
 
 package tests;
+
 import model.User;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.LoginPage;
 
 import java.io.IOException;
 
+import static org.testng.Assert.assertEquals;
 import static util.ConnectionNetWork.disConnectInternet;
 
 public class LoginFormTest extends CommonConditions {
@@ -18,8 +19,7 @@ public class LoginFormTest extends CommonConditions {
     private static final String ANOTHER_CASE = "Произошла ошибка. Обновите страницу или зайдите позже";
     private static final String NOT_VALID_USER = "Такой пользователь отсутствует в списке пользователей CRM Trainee";
 
-
-    @Test(groups = {"valid_user" },description = "ЮС 4.1.4.1.")
+    @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.1.")
     public static void checkEmailErrorMessage() {
         //User testUserEmptyEmail = UserCreator.withCredentialsFromProperty();
         User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
@@ -29,10 +29,10 @@ public class LoginFormTest extends CommonConditions {
                 .clearEmailField()
                 .fillInPassWindow(testUser)
                 .getErrorMessageEnterEmail();
-        Assert.assertEquals(EMPTY_EMAIL_FIELD_MESSAGE, emptyFieldMessageText);
+        assertEquals(EMPTY_EMAIL_FIELD_MESSAGE, emptyFieldMessageText);
     }
 
-    @Test(groups = {"valid_user" },description = "ЮС 4.1.4.2.")
+    @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.2.")
     public static void checkPasswordErrorMessage() {
         //User testUserEmptyPassword = UserCreator.withCredentialsFromProperty();
         User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
@@ -42,10 +42,10 @@ public class LoginFormTest extends CommonConditions {
                 .fillInPassWindow(testUser)
                 .clearPasswordField()
                 .getErrorMessageEnterPassword();
-        Assert.assertEquals(emptyFieldMessageText, EMPTY_PASSWORD_FIELD_MESSAGE);
+        assertEquals(emptyFieldMessageText, EMPTY_PASSWORD_FIELD_MESSAGE);
     }
 
-    @Test(groups = {"invalid_user" },description = "ЮС 4.1.4.3.")
+    @Test(groups = {"invalid_user"}, description = "ЮС 4.1.4.3.")
     public static void checkInvalidDomainNameMessage() {
         //User testUserInvalidEmailDomain = UserCreator.withCredentialsFromProperty();
         User testUser = new User("huntflow-test-16@gmail.com", "159753CFThn");
@@ -55,10 +55,10 @@ public class LoginFormTest extends CommonConditions {
                 .fillInPassWindow(testUser)
                 .enterButtonClick()
                 .getErrorMessageInvalidEmailDomain();
-        Assert.assertEquals(NOT_VALID_EMAIL, invalidDomainNameMessageText);
+        assertEquals(NOT_VALID_EMAIL, invalidDomainNameMessageText);
     }
-    //TODO
-    @Test(groups = {"invalid_user" },description = "ЮС 4.1.4.4.")
+
+    @Test(groups = {"invalid_user"}, description = "ЮС 4.1.4.4.")
     public static void notAuthorizedUser() {
         //User testUserNotAuthorizedInDataBase = UserCreator.withCredentialsFromProperty();
         User testUser = new User("no-authorize-user@andersenlab.com", "123");
@@ -68,24 +68,23 @@ public class LoginFormTest extends CommonConditions {
                 .fillInPassWindow(testUser)
                 .enterButtonClick()
                 .getErrorMessageNoSuchUser();
-        Assert.assertEquals(NOT_VALID_USER, notAuthorizedErrorMessage);
+        assertEquals(NOT_VALID_USER, notAuthorizedErrorMessage);
     }
-    //TODO
-    @Test(groups = {"valid_user" },description = "ЮС 4.1.4.5.")
+
+    @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.5.")
     public static void notValidPasswordMessage() {
         //User testValidUserWithInvalidPassword = UserCreator.withCredentialsFromProperty();
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
-        testUser.setPassword("wrong_pass123");
+        User testUser = new User("huntflow-test-16@andersenlab.com", "wrong_pass123");
         String invalidPassword = new LoginPage(driver)
                 .openPage()
                 .fillInEmailWindow(testUser)
                 .fillInPassWindow(testUser)
                 .enterButtonClick()
                 .getErrorMessageInCaseInvalidPassword();
-        Assert.assertEquals(INVALID_PASSWORD, invalidPassword);
+        assertEquals(INVALID_PASSWORD, invalidPassword);
     }
 
-    @Test(groups = {"valid_user" },description = "ЮС 4.1.4.6.")
+    @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.6.")
     public static void noInternet() throws IOException {
         //User testValidUserWithInvalidPassword = UserCreator.withCredentialsFromProperty();
         User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
@@ -97,7 +96,7 @@ public class LoginFormTest extends CommonConditions {
         String errorMessageAnotherCase = loginPage
                 .enterButtonClick()
                 .getErrorMessageAnotherCase();
-        Assert.assertEquals(errorMessageAnotherCase,ANOTHER_CASE);
+        assertEquals(errorMessageAnotherCase, ANOTHER_CASE);
     }
 }
 

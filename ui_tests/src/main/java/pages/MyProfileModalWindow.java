@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
@@ -15,12 +16,23 @@ public class MyProfileModalWindow extends AbstractPage {
     private final Logger logger = LogManager.getRootLogger();
     private final String BASE_URL = "https://crm-trainee-react-dev.andersenlab.dev/";
 
-    final By jiraButton = By.xpath("//*[text()='Jira']");
-    final By exitButton = By.xpath("//*[text()='Выйти']");
-    final By supportButton = By.xpath("//*[text()='Support']");
-    final By myProfileButton = By.xpath("//*[text()='Мой профиль']");
-    final By telegramButton = By.xpath("//*[text()='Telegram admin']");
-    final By popUpMenu = By.xpath("//*[@id='root']//nav//div[2]/div[2]/div[2]");
+    @FindBy(xpath = "//*[text()='Jira']")
+    private WebElement jiraButton;
+
+    @FindBy(xpath = "//*[text()='Выйти']")
+    private WebElement exitButton;
+
+    @FindBy(xpath = "//*[text()='Support']")
+    private WebElement supportButton;
+
+    @FindBy(xpath = "//*[text()='Мой профиль']")
+    WebElement myProfileButton;
+
+    @FindBy(xpath = "//*[text()='Telegram admin']")
+    WebElement telegramButton;
+
+    @FindBy(xpath = "//div[contains(@class,'popupMenu_popup')]")
+    private WebElement popUpMenu;
 
     protected MyProfileModalWindow(WebDriver driver) {
         super(driver);
@@ -41,36 +53,37 @@ public class MyProfileModalWindow extends AbstractPage {
 
     List<String> getContentModalWindow() {
         List<String> listNamesInModalWindow = new ArrayList<>();
-        WebElement modalWindowElement = getElementWithTimeOut(popUpMenu);
-        List<WebElement> elements = modalWindowElement.findElements(By.className("popupMenu_option__3ZD4c"));
-        for (WebElement element : elements) {
-            listNamesInModalWindow.add(element.getText());
+        String[] res = popUpMenu
+                .findElement(By.xpath("//div[contains(@class,'popupMenu_popup')]"))
+                .getText()
+                .split("\n");
+        for (int i = 0; i < res.length; i++) {
+            listNamesInModalWindow.add(res[i]);
         }
         return listNamesInModalWindow;
     }
 
     public LoginPage clickExit() {
-        getElementWithTimeOut(exitButton).click();
+        exitButton.click();
         return new LoginPage(driver);
     }
 
     public List<String> getTextModalWindow() {
         return new MyProfileModalWindow(this.driver).getContentModalWindow();
-
     }
 
     public TelegramAdminPage clickOnTelegramAdminButton() {
-        getElementWithTimeOut(telegramButton).click();
+        telegramButton.click();
         return new TelegramAdminPage(driver);
     }
 
     public JiraPage clickOnJiraButton() {
-        getElementWithTimeOut(jiraButton).click();
+        jiraButton.click();
         return new JiraPage(driver);
     }
 
     public SupportPage clickOnSupportButton() {
-        getElementWithTimeOut(supportButton).click();
+        supportButton.click();
         return new SupportPage(driver);
     }
 }

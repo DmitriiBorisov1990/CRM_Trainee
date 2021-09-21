@@ -1,9 +1,12 @@
 package pages;
 
+import driver.WaitHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class MainPage extends AbstractPage {
@@ -11,8 +14,11 @@ public class MainPage extends AbstractPage {
     private final Logger logger = LogManager.getRootLogger();
     private final String BASE_URL = "https://crm-trainee-react-dev.andersenlab.dev/";
 
-    private final By buttonOpenLeftMenuBar = By.className("sidebar_arrow__2XyM_");
-    private final By myProfileButtonLiftMenuBar = By.xpath("//*[@id='root']//div[2]//div[2]//a");
+    @FindBy(xpath = "//button[contains(@class,'sidebar_arrow')]")
+    private WebElement buttonOpenLeftMenuBar;
+
+    @FindBy(xpath = "//a[contains(@class,'sidebarOption_option')]//img")
+    private WebElement myProfileButtonLiftMenuBar;
 
     public MainPage(WebDriver driver) {
         super(driver);
@@ -31,22 +37,27 @@ public class MainPage extends AbstractPage {
     }
 
     public MyProfileModalWindow clickToMyProfileButton() {
-        getElementWithTimeOut(myProfileButtonLiftMenuBar).click();
+        WaitHelper.waitForElementClickable(driver, myProfileButtonLiftMenuBar);
+        myProfileButtonLiftMenuBar.click();
+        logger.info("---> Click on my profile button");
         return new MyProfileModalWindow(driver);
     }
 
     public LeftSideBarMenu clickOnLeftMenuBar() {
-        getElementWithTimeOut(buttonOpenLeftMenuBar).click();
+        WaitHelper.waitForElementClickable(driver, buttonOpenLeftMenuBar);
+        buttonOpenLeftMenuBar.click();
         logger.info("---> Click on menu bar");
         return new LeftSideBarMenu(driver);
     }
 
     public boolean clickOnLeftSideMenuBarAndExit() {
-        getElementWithTimeOut(buttonOpenLeftMenuBar).click();
+        WaitHelper.waitForElementClickable(driver, buttonOpenLeftMenuBar);
+        buttonOpenLeftMenuBar.click();
         boolean result = isLeftMenuBarOpen();
         new LeftSideBarMenu(this.driver)
                 .clickOnMyProfile()
                 .clickExit();
+        logger.info("---> Click on exit button");
         return result;
     }
 

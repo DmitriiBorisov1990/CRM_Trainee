@@ -1,7 +1,7 @@
 package tests;
 
 import model.User;
-import org.testng.Assert;
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import pages.LoginPage;
@@ -9,6 +9,8 @@ import pages.LoginPage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.testng.Assert.assertEquals;
 
 public class MyProfileModalWindowTest extends CommonConditions {
 
@@ -25,47 +27,39 @@ public class MyProfileModalWindowTest extends CommonConditions {
                 .login(testUser)
                 .clickToMyProfileButton()
                 .getTextModalWindow();
-        System.out.println(actualResult + "\n" + namesList);
-        Assert.assertEquals(actualResult, namesList);
+        //System.out.println(actualResult + "\n" + namesList);
+        assertEquals(actualResult, namesList);
     }
 
     //TODO
-    @Test(groups = {"valid_user"}, description = "https://jsupport.andersenlab.com/servicedesk/customer/portals")
+    @Test(groups = {"valid_user"}, description = "Переход на страницу поддержки")
     public static void supportPageAcesTest() {
         User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
-        //String actualResult =
         new LoginPage(driver)
                 .openPage()
                 .login(testUser)
                 .clickToMyProfileButton()
                 .clickOnSupportButton();
-        List<String> activeTabs = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(activeTabs.get(1));
-        String telegramCurrentUrl = driver.getCurrentUrl();
-        driver.close();
-        driver.switchTo().window(activeTabs.get(0));
-        Assert.assertEquals(telegramCurrentUrl, SUPPORT_PAGE_URL);
+        switchToNewTab(driver);
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals(currentUrl, SUPPORT_PAGE_URL);
     }
 
     @Test(groups = {"valid_user"}, description = "https://jira.andersenlab.com/secure/Dashboard.jspa")
     public static void jiraPageAcesTest() {
         User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
-        //String actualResult = null;
         new LoginPage(driver)
                 .openPage()
                 .login(testUser)
                 .clickToMyProfileButton()
                 .clickOnJiraButton();
-        List<String> activeTabs = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(activeTabs.get(1));
-        String telegramCurrentUrl = driver.getCurrentUrl();
-        driver.close();
-        driver.switchTo().window(activeTabs.get(0));
-        Assert.assertEquals(telegramCurrentUrl, JIRA_URL);
+        switchToNewTab(driver);
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals(currentUrl, JIRA_URL);
     }
 
     @Ignore
-    @Test(groups = {"valid_user"}, description = "http://18.196.202.114/login")
+    @Test(groups = {"valid_user"}, description = "Переход на страницу с Telegram")
     public static void telegramAdminPageAcesTest() {
         User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
         new LoginPage(driver)
@@ -78,6 +72,11 @@ public class MyProfileModalWindowTest extends CommonConditions {
         String telegramCurrentUrl = driver.getCurrentUrl();
         driver.close();
         driver.switchTo().window(activeTabs.get(0));
-        Assert.assertEquals(telegramCurrentUrl, TELEGRAM_ADMIN);
+        assertEquals(telegramCurrentUrl, TELEGRAM_ADMIN);
+    }
+
+    private static void switchToNewTab(WebDriver driver){
+        List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(windowHandles.get(1));
     }
 }
