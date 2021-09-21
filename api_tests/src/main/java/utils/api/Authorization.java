@@ -1,6 +1,6 @@
 package utils.api;
 
-import controllers.token_controller.Token;
+import controllers.token_controller.TokenController;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.testng.log4testng.Logger;
@@ -19,9 +19,9 @@ public class Authorization {
     public static void login() {
 
         RestAssured.baseURI = BASE_URI;
-        Token createToken = new Token(PASSWORD, EMAIL);
+        TokenController createTokenController = new TokenController(PASSWORD, EMAIL);
 
-        String userLoginJsonBody = JsonObjectHelper.generateObjectToJson(createToken);
+        String userLoginJsonBody = JsonObjectHelper.generateObjectToJson(createTokenController);
         JSESSIONID = given()
                 .header("Content-Type", ContentType.JSON)
                 .body(userLoginJsonBody)

@@ -1,4 +1,4 @@
-package utils;
+package transaction;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

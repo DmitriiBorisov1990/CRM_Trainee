@@ -1,17 +1,23 @@
 package dao;
 
 import entity.Role;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import utils.ConnectionManager;
+import transaction.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RoleDao {
 
+    private static final String GET_ALL = "SELECT* FROM user_role";
     private static final String DELETE = "DELETE FROM user_role WHERE id = ?";
     private static final String FIND_ONE = "SELECT* " + " FROM user_role " + " WHERE id = ?";
     private static final String SAVE = "INSERT INTO user_role (role_name,description_ru,description_en)" + "VALUES(?,?,?)";
@@ -43,6 +49,24 @@ public class RoleDao {
     }
 
     @SneakyThrows
+    public List<Role> getAll(){
+        List<Role> roleList = new ArrayList<>();
+        try (Connection connection = ConnectionManager.get();
+        PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+               Role role = Role.builder().id(resultSet.getInt("id"))
+                       .roleName(resultSet.getString("role_name"))
+                       .descriptionRu(resultSet.getString("description_ru"))
+                       .descriptionEn(resultSet.getString("description_en"))
+                       .build();
+                roleList.add(role);
+            }
+        }
+        return roleList;
+    }
+
+    @SneakyThrows
     public Role saveRole(Role role) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE, Statement.RETURN_GENERATED_KEYS)) {
@@ -59,6 +83,10 @@ public class RoleDao {
         return role;
     }
 
+    /**
+     * @param role
+     * @return Role object after update
+     **/
     @SneakyThrows
     public Role update(Role role) {
         try (Connection connection = ConnectionManager.get();
@@ -66,7 +94,7 @@ public class RoleDao {
             preparedStatement.setString(1, role.getRoleName());
             preparedStatement.setString(2, role.getDescriptionRu());
             preparedStatement.setString(3, role.getDescriptionEn());
-            preparedStatement.setInt(4,role.getId());
+            preparedStatement.setInt(4, role.getId());
             preparedStatement.executeUpdate();
         }
         return role;

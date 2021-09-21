@@ -71,7 +71,6 @@ public class LoginFormTest extends CommonConditions {
         assertEquals(NOT_VALID_USER, notAuthorizedErrorMessage);
     }
 
-    //TODO
     @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.5.")
     public static void notValidPasswordMessage() {
         //User testValidUserWithInvalidPassword = UserCreator.withCredentialsFromProperty();

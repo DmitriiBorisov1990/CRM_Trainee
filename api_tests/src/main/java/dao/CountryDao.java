@@ -4,7 +4,7 @@ import entity.Country;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import utils.ConnectionManager;
+import transaction.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

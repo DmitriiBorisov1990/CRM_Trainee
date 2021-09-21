@@ -11,7 +11,6 @@ import static org.testng.Assert.assertEquals;
 
 public class LeftSideMenuBarTest extends CommonConditions {
 
-    //TODO
     @Test(groups = {"valid_user"}, description = "ЮС 5.1.3.")
     public static void testLeftMenuBarContentTest() {
         List<String> namesList = Arrays.asList(
@@ -24,7 +23,6 @@ public class LeftSideMenuBarTest extends CommonConditions {
                 .login(testUser)
                 .clickOnLeftMenuBar()
                 .getTextLeftMenuBar();
-        //System.out.println(namesList + "\n" + resultNamesList);
         assertEquals(namesList, resultNamesList);
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserControllerResponse {
+public class UserController {
 
     @JsonProperty("id")
     private Integer id;

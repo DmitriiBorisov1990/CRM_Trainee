@@ -4,7 +4,6 @@ import driver.WaitHelper;
 import model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,13 +24,8 @@ public class LoginPage extends AbstractPage {
     @FindBy(xpath = "//button[text()='Войти' and @type='submit']")
     private WebElement submitButton;
 
-    @FindBy(xpath = "//span[contains(@class,'login_error-message')]")
-    private WebElement emailErrorMessageElement;
-
-    @FindBy(xpath = "//div[contains(@class,'login_error-message')]")
-    private WebElement passwordErrorMessageElement;
-
-    private final By errorMessageAnotherCase = By.xpath("//*[text()='Произошла ошибка. Обновите страницу или зайдите позже']");
+    @FindBy(xpath = "//*[contains(@class,'login_error-message')]")
+    private WebElement errorMessage;
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -88,28 +82,28 @@ public class LoginPage extends AbstractPage {
     }
 
     public String getErrorMessageEnterEmail() {
-        return emailErrorMessageElement.getText();
+        return errorMessage.getText();
     }
 
     public String getErrorMessageEnterPassword() {
-        return emailErrorMessageElement.getText();
+        return errorMessage.getText();
     }
 
     public String getErrorMessageInvalidEmailDomain() {
-        return emailErrorMessageElement.getText();
+        return errorMessage.getText();
     }
 
     public String getErrorMessageNoSuchUser() {
-        WaitHelper.waitForTextToAppear(driver,"Такой пользователь отсутствует в списке пользователей CRM Trainee",passwordErrorMessageElement);
-        return passwordErrorMessageElement.getText();
+        WaitHelper.waitForTextToAppear(driver, "Такой пользователь отсутствует в списке пользователей CRM Trainee", errorMessage);
+        return errorMessage.getText();
     }
 
     public String getErrorMessageInCaseInvalidPassword() {
-        WaitHelper.waitForTextToAppear(driver,"Пароль или логин введен неверно",passwordErrorMessageElement);
-        return passwordErrorMessageElement.getText();
+        WaitHelper.waitForTextToAppear(driver, "Пароль или логин введен неверно", errorMessage);
+        return errorMessage.getText();
     }
 
     public String getErrorMessageAnotherCase() {
-        return getElementWithTimeOut(errorMessageAnotherCase).getText();
+        return errorMessage.getText();
     }
 }

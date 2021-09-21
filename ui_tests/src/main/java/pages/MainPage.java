@@ -17,7 +17,7 @@ public class MainPage extends AbstractPage {
     @FindBy(xpath = "//button[contains(@class,'sidebar_arrow')]")
     private WebElement buttonOpenLeftMenuBar;
 
-    @FindBy(xpath = "//*[@id='root']//div[2]//div[2]//a")
+    @FindBy(xpath = "//a[contains(@class,'sidebarOption_option')]//img")
     private WebElement myProfileButtonLiftMenuBar;
 
     private MyProfileModalWindow modalWindow;

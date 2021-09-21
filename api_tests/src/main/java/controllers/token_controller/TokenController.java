@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class Token {
+public class TokenController {
 
 	@JsonProperty("password")
 	private String password;

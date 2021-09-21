@@ -6,7 +6,7 @@ import entity.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import utils.ConnectionManager;
+import transaction.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -86,7 +86,8 @@ public class UserDao {
             preparedStatement.setString(8, user.getPhone());
             preparedStatement.setObject(9, Optional
                     .ofNullable(user.getRole()).map(Role::getId).orElse(null));
-            preparedStatement.setObject(10, Optional.ofNullable(user.getOffice()).map(Office::getId).orElse(null));
+            preparedStatement.setObject(10, Optional
+                    .ofNullable(user.getOffice()).map(Office::getId).orElse(null));
             if (preparedStatement.executeUpdate() == 1) {
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
