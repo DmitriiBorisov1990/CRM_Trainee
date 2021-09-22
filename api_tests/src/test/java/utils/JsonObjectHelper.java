@@ -1,4 +1,4 @@
-package utils.json;
+package utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;

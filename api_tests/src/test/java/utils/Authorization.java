@@ -1,14 +1,15 @@
-package utils.api;
+package utils;
 
 import controllers.token_controller.TokenController;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import lombok.experimental.UtilityClass;
 import org.testng.log4testng.Logger;
-import utils.json.JsonObjectHelper;
 
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 
+@UtilityClass
 public class Authorization {
     public static String JSESSIONID;
     private static final String PASSWORD = "159753CFThn";

@@ -3,7 +3,7 @@ import entity.Country;
 import lombok.SneakyThrows;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import utils.api.Authorization;
+import utils.Authorization;
 
 import java.util.Optional;
 
