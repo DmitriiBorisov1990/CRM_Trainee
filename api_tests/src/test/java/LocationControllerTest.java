@@ -17,11 +17,10 @@ public class LocationControllerTest {
 
     @Test
     public static void getCountryById(){
-
        Optional<Country> countryOptional = CountryDao.getInstance().getOne(1);
         System.out.println(countryOptional.toString());
-
     }
+
     @SneakyThrows
     private static void loadDriver() {
         Class.forName("com.mysql.cj.jdbc.Driver");

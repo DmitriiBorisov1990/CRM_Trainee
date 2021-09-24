@@ -13,15 +13,6 @@ public class ApiTest {
     private static final Logger logger = LogManager.getLogger(ApiTest.class);
 
     @Test
-    public static void firstTest(){
-        logger.info("INFO");
-        logger.debug("DEBUG");
-        logger.error("ERROR");
-        logger.fatal("FATAL");
-        logger.warn("WARN");
-    }
-
-    @Test
     public void test_01() {
         Response response = get("https://reqres.in/api/users?page=2");
         System.out.println(response.getHeader("content-type"));

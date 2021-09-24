@@ -1,6 +1,5 @@
 import dao.RoleDao;
 import entity.Role;
-import io.restassured.http.ContentType;
 import lombok.SneakyThrows;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -10,10 +9,9 @@ import utils.HttpHelper;
 import utils.JsonObjectHelper;
 
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
 
 public class RoleControllerTest {
 
@@ -28,38 +26,39 @@ public class RoleControllerTest {
         loadDriver();
     }
 
-    //TODO
     @Test
     static void getAllRoleTest() {
-        given()
-                .headers(HttpHelper.requestHeaderFieldPutKey("Authorization", "CRM_HA " + Authorization.JSESSIONID))
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, ContentType.JSON, GET_ALL_ROLE_PATH))
-                .then().log().body().statusCode(200);
-        System.out.println(RoleDao.getInstance().getAll());
+        String jsonString = given()
+                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, GET_ALL_ROLE_PATH))
+                .when()
+                .get()
+                .then()
+                .spec(HttpHelper.setResponseSpec(JSON,200))
+                .extract()
+                .body().asPrettyString();
+        Assert.assertEquals(RoleDao.getInstance().getAll(),JsonObjectHelper.stringToObjects(jsonString,Role.class));
     }
 
     @Test(description = "POST. Role controller create role -> /role")
     static void createRoleTest() {
-
         Role entity = Role.builder().roleName("LAZY_PERSON").descriptionRu("Лентяй").descriptionEn("lazy person").build();
         String jsonString = JsonObjectHelper.generateObjectToJson(entity);
         Role objectResponse = given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, ContentType.JSON, CREATE_ROLE))
+                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, CREATE_ROLE))
                 .body(jsonString)
                 .when()
                 .post()
-                .then().statusCode(201)
+                .then()
+                .spec(HttpHelper.setResponseSpec(JSON,201))
                 .extract()
                 .as(Role.class);
         entity.setId(objectResponse.getId());
-        System.out.println(entity + "\n" + objectResponse);
         RoleDao.getInstance().deleteRole(objectResponse.getId());
-        Assert.assertTrue(entity.equals(objectResponse));
+        Assert.assertEquals(objectResponse, entity);
     }
 
     @Test(description = "GET. Role controller get role by id -> /role/{id}")
     static void getRoleByIdTest() {
-
         Role entity = Role.builder()
                 .roleName("AUTOMATION_TESTING")
                 .descriptionRu("Автоматизация тестирования")
@@ -67,18 +66,18 @@ public class RoleControllerTest {
                 .build();
         Role roleOptional = RoleDao.getInstance().saveRole(entity);
         String responseJsonAsString = given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, ContentType.JSON, GET_ROLE_BY_ID))
+                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, GET_ROLE_BY_ID))
                 .pathParam("id", roleOptional.getId())
                 .when()
                 .get()
                 .then()
-                .spec(HttpHelper.setResponseSpec(ContentType.JSON))
+                .spec(HttpHelper.setResponseSpec(JSON,200))
                 .extract()
                 .asString();
         Class<Role> roleClass = Role.class;
         Role controllerResponse = JsonObjectHelper.generateJsonToObject(responseJsonAsString, roleClass);
         RoleDao.getInstance().deleteRole(roleOptional.getId());
-        Assert.assertTrue(entity.equals(controllerResponse));
+        Assert.assertEquals(controllerResponse, entity);
     }
 
     @Test(description = "DELETE.DRole controller get role by id -> /role/{id}")
@@ -88,46 +87,42 @@ public class RoleControllerTest {
                 .descriptionRu("Тестировщик ПО")
                 .descriptionEn("QA manual")
                 .build();
-        System.out.println(entity);
         Role roleInDataBase = RoleDao.getInstance().saveRole(entity);
         entity.setId(roleInDataBase.getId());
-        System.out.println(entity);
         given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, ContentType.JSON, GET_ROLE_BY_ID))
+                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, GET_ROLE_BY_ID))
                 .pathParam("id", roleInDataBase.getId())
                 .when()
-                .delete().then().statusCode(200);
+                .delete()
+                .then()
+                .statusCode(200);
         Optional<Role> optionalRole = RoleDao.getInstance().getOne(roleInDataBase.getId());
         Assert.assertTrue(optionalRole.isEmpty());
     }
 
     @Test(description = "PUT. Role controller update user role -> /role/{id}")
     static void updateRoleTest() {
-
         Role entity = Role.builder()
-                .roleName("AQA")
+                .roleName("AQa")
                 .descriptionRu("Автоматизатор ПО")
                 .descriptionEn("AQA engineer")
                 .build();
         Role roleInDataBase = RoleDao.getInstance().saveRole(entity);
         entity.setId(roleInDataBase.getId());
-        // System.out.println(entity);
         entity = stringToUpperCase(entity);
         String requestBody = JsonObjectHelper.generateObjectToJson(entity);
-        //  System.out.println(requestBody);
         Role roleAfterUpdate = given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, ContentType.JSON, GET_ROLE_BY_ID))
+                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, GET_ROLE_BY_ID))
                 .pathParam("id", roleInDataBase.getId())
                 .body(requestBody)
                 .when()
                 .put()
-                .then().statusCode(200)
+                .then()
+                .spec(HttpHelper.setResponseSpec(JSON,200))
                 .extract()
                 .as(Role.class);
-        // получить role по id  из db
-        Optional<Role> roleOptional = RoleDao.getInstance().getOne(roleInDataBase.getId());
-        System.out.println(roleOptional + "\n" + entity + "\n" + roleAfterUpdate);
-        Assert.assertTrue(entity.equals(roleAfterUpdate));
+        RoleDao.getInstance().deleteRole(roleInDataBase.getId());
+        Assert.assertEquals(roleAfterUpdate, entity);
     }
 
     @SneakyThrows
@@ -135,20 +130,12 @@ public class RoleControllerTest {
         Class.forName("com.mysql.cj.jdbc.Driver");
     }
 
-    public static <T> UnaryOperator<T> peek(Consumer<T> consumer) {
-        return object -> {
-            consumer.accept(object);
-            return object;
-        };
-    }
-
     private static Role stringToUpperCase(Role entity) {
-        Role updateEntity = Role.builder()
+        return Role.builder()
                 .id(entity.getId())
                 .roleName(entity.getRoleName().toUpperCase())
                 .descriptionRu(entity.getDescriptionRu().toUpperCase())
                 .descriptionEn(entity.getDescriptionEn().toUpperCase())
                 .build();
-        return updateEntity;
     }
 }

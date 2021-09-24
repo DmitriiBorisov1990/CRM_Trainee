@@ -19,8 +19,8 @@ public class HttpHelper {
         return result;
     }
 
-    public static ResponseSpecification setResponseSpec(ContentType contentType) {
-        return new ResponseSpecBuilder().expectStatusCode(200).expectContentType(contentType).build();
+    public static ResponseSpecification setResponseSpec(ContentType contentType,int statusCode) {
+        return new ResponseSpecBuilder().expectStatusCode(statusCode).expectContentType(contentType).build();
     }
 
     public static RequestSpecification setRequestSpec(String baseUri, ContentType contentType, String basePath) {
