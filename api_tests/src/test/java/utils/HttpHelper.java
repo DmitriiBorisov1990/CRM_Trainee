@@ -19,15 +19,16 @@ public class HttpHelper {
         return result;
     }
 
-    public static ResponseSpecification setResponseSpec(ContentType contentType) {
-        return new ResponseSpecBuilder().expectStatusCode(200).expectContentType(contentType).build();
+    public static ResponseSpecification setResponseSpec(ContentType contentType,int statusCode) {
+        return new ResponseSpecBuilder().expectStatusCode(statusCode).expectContentType(contentType).build();
     }
 
     public static RequestSpecification setRequestSpec(String baseUri, ContentType contentType, String basePath) {
         return new RequestSpecBuilder()
+                .addHeaders(requestHeaderFieldPutKey("Authorization", "CRM_HA " + Authorization.JSESSIONID))
                 .setBaseUri(baseUri)
                 .setContentType(contentType)
-                .setBasePath(basePath) // "/api/users/{id}"
+                .setBasePath(basePath)
                 .build();
     }
 }

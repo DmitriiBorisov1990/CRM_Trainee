@@ -3,8 +3,8 @@ import dao.UserDao;
 import lombok.SneakyThrows;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import utils.api.Authorization;
-import utils.json.JsonObjectHelper;
+import utils.Authorization;
+import utils.JsonObjectHelper;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;

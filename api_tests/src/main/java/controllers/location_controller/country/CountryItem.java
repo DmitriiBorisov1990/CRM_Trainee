@@ -12,18 +12,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CountryItem{
 
-	@JsonProperty("countryNameRu")
-	private String countryNameRu;
-
-	@JsonProperty("countryCode3")
-	private String countryCode3;
-
 	@JsonProperty("id")
 	private int id;
 
 	@JsonProperty("countryCode2")
 	private String countryCode2;
 
+	@JsonProperty("countryCode3")
+	private String countryCode3;
+
+	@JsonProperty("countryNameRu")
+	private String countryNameRu;
+
 	@JsonProperty("countryNameEn")
 	private String countryNameEn;
+
+	@JsonProperty("visibility")
+	private Boolean visibility;
 }
