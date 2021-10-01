@@ -1,28 +1,12 @@
-import controllers.user_controller.UserController;
-import dao.UserDao;
-import lombok.SneakyThrows;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import utils.Authorization;
-import utils.JsonObjectHelper;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
-import static utils.HttpHelper.requestHeaderFieldPutKey;
-
-public class UserControllerTests {
+public class UserControllerTests extends BaseTest {
 
     private static final String REQUEST_URL = "http://10.10.15.160:8080/api/users/";
-
-    @BeforeTest
-    void start() {
-        Authorization.login();
-        loadDriver();
-    }
 
     @Test
     static void getUserById() {
@@ -46,18 +30,18 @@ public class UserControllerTests {
         Optional<User> user = UserDao.getInstance().getOne(testUser.getId());
         System.out.println(user.toString());*/
 
-        UserDao.getInstance()
+        /*UserDao.getInstance()
                 .getOne(70205)
                 .map(peek(it ->it.setBirthday(dateOfBirthday(1990, 9, 17))))
-                .ifPresent(UserDao.getInstance()::update);
+                .ifPresent(UserDao.getInstance()::update);*/
 
-        String jsonResponse = given()
+        /*String jsonResponse = given()
                 .header("Content-type", JSON)
                 .headers(requestHeaderFieldPutKey("Authorization", "CRM_HA " + Authorization.JSESSIONID))
                 .accept(JSON)
                 .get(REQUEST_URL + "70205")
                 .then().statusCode(200).contentType(JSON).extract().asString();
-        UserController testUserObject = JsonObjectHelper.generateJsonToObject(jsonResponse, UserController.class);
+        UserController testUserObject = JsonObjectHelper.generateJsonToObject(jsonResponse, UserController.class);*/
         //System.out.println(testUserObject.toString() + "\n" + testUser);
         //Assert.assertTrue(UserDao.getInstance().deleteUser(70203));
     }
@@ -79,10 +63,5 @@ public class UserControllerTests {
             consumer.accept(object);
             return object;
         };
-    }
-
-    @SneakyThrows
-    private static void loadDriver() {
-        Class.forName("com.mysql.cj.jdbc.Driver");
     }
 }

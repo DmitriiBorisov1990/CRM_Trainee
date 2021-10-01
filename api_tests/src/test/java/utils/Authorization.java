@@ -22,7 +22,7 @@ public class Authorization {
         RestAssured.baseURI = BASE_URI;
         TokenController createTokenController = new TokenController(PASSWORD, EMAIL);
 
-        String userLoginJsonBody = JsonObjectHelper.generateObjectToJson(createTokenController);
+        String userLoginJsonBody = JsonObjectHelper.generateObjectToJsonString(createTokenController);
         JSESSIONID = given()
                 .header("Content-Type", ContentType.JSON)
                 .body(userLoginJsonBody)

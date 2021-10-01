@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class RoleController {
+@NoArgsConstructor
+public class RoleJsonObject {
 
     @JsonProperty("id")
     private Integer id;

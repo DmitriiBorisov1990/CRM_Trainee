@@ -1,6 +1,5 @@
 package utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -12,7 +11,7 @@ import java.util.List;
 public class JsonObjectHelper {
 
     @SneakyThrows
-    public static <T> String generateObjectToJson(T object) {
+    public static <T> String generateObjectToJsonString(T object) {
         return new ObjectMapper().writeValueAsString(object);
     }
 
@@ -21,13 +20,13 @@ public class JsonObjectHelper {
         return new ObjectMapper().readValue(jsonString, t);
     }
 
-    @SneakyThrows
+    //TODO
+    /*@SneakyThrows
     public static <T> List<T> generateJsonToListObjects(String jsonString) {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<T> t = objectMapper.readValue(jsonString, new TypeReference<>() {
-        });
+        List<T> t = objectMapper.readValue(jsonString, new TypeReference<>() {});
         return t;
-    }
+    }*/
 
     @SneakyThrows
     public static <T> List<T> stringToObjects(String str, Class<T> type) {

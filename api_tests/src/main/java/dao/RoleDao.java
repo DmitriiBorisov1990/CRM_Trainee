@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RoleDao {
@@ -30,7 +29,7 @@ public class RoleDao {
      * @Description swagger /role Get all user roles;
      **/
     @SneakyThrows
-    public Optional<Role> getOne(int id) {
+    public Role getOne(int id) {
         Role role = null;
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ONE)) {
@@ -45,21 +44,22 @@ public class RoleDao {
                         .build();
             }
         }
-        return Optional.ofNullable(role);
+        return role;
     }
 
     @SneakyThrows
-    public List<Role> getAll(){
+    public List<Role> getAll() {
         List<Role> roleList = new ArrayList<>();
         try (Connection connection = ConnectionManager.get();
-        PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-               Role role = Role.builder().id(resultSet.getInt("id"))
-                       .roleName(resultSet.getString("role_name"))
-                       .descriptionRu(resultSet.getString("description_ru"))
-                       .descriptionEn(resultSet.getString("description_en"))
-                       .build();
+            while (resultSet.next()) {
+                Role role = Role.builder()
+                        .id(resultSet.getInt("id"))
+                        .roleName(resultSet.getString("role_name"))
+                        .descriptionRu(resultSet.getString("description_ru"))
+                        .descriptionEn(resultSet.getString("description_en"))
+                        .build();
                 roleList.add(role);
             }
         }

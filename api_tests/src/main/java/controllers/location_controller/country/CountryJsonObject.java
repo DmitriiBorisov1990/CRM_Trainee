@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CountryItem{
+public class CountryJsonObject {
 
 	@JsonProperty("id")
-	private int id;
+	private Integer id;
 
 	@JsonProperty("countryCode2")
 	private String countryCode2;

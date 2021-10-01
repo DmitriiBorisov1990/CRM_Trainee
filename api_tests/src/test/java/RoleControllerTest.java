@@ -1,141 +1,73 @@
+import controllers.role_controller.RoleJsonObject;
 import dao.RoleDao;
 import entity.Role;
-import lombok.SneakyThrows;
 import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import utils.Authorization;
 import utils.HttpHelper;
 import utils.JsonObjectHelper;
+import utils.role.RoleEntityHelper;
+import utils.role.RoleJsonHelper;
 
-import java.util.Optional;
-
-import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 
-public class RoleControllerTest {
+public class RoleControllerTest extends BaseTest {
 
+    private static int id;
     private static final String CREATE_ROLE = "/api/role";
-    private static final String GET_ALL_ROLE_PATH = "/api/role";
+    private static final String GET_ALL_ROLE = "/api/role";
     private static final String GET_ROLE_BY_ID = "/api/role/{id}";
+    private static final String UPDATE_ROLE_BY_ID = "/api/role/{id}";
+    private static final String DELETE_ROLE_BY_ID = "/api/role/{id}";
     private static final String REQUEST_URL = "http://10.10.15.160:8080";
 
-    @BeforeTest
-    void authorization() {
-        Authorization.login();
-        loadDriver();
-    }
-
-    @Test
+    //TODO ?
+    @Test(description = "GET. Role controller get all user roles -> /role")
     static void getAllRoleTest() {
-        String jsonString = given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, GET_ALL_ROLE_PATH))
-                .when()
-                .get()
-                .then()
-                .spec(HttpHelper.setResponseSpec(JSON,200))
-                .extract()
-                .body().asPrettyString();
-        Assert.assertEquals(RoleDao.getInstance().getAll(),JsonObjectHelper.stringToObjects(jsonString,Role.class));
+        String jsonString = HttpHelper.getMethodGetAll(REQUEST_URL, GET_ALL_ROLE, JSON, 200);
+        //System.out.println(RoleDao.getInstance().getAll() + "\n" + JsonObjectHelper.stringToObjects(jsonString, RoleJsonObject.class));
+        Assert.assertTrue(RoleDao.getInstance().getAll().size() == JsonObjectHelper.stringToObjects(jsonString, RoleJsonObject.class).size());
     }
 
-    @Test(description = "POST. Role controller create role -> /role")
+    @Test(description = "POST. Role controller create user role -> /role")
     static void createRoleTest() {
-        Role entity = Role.builder().roleName("LAZY_PERSON").descriptionRu("Лентяй").descriptionEn("lazy person").build();
-        String jsonString = JsonObjectHelper.generateObjectToJson(entity);
-        Role objectResponse = given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, CREATE_ROLE))
-                .body(jsonString)
-                .when()
-                .post()
-                .then()
-                .spec(HttpHelper.setResponseSpec(JSON,201))
-                .extract()
-                .as(Role.class);
-        entity.setId(objectResponse.getId());
-        RoleDao.getInstance().deleteRole(objectResponse.getId());
-        Assert.assertEquals(objectResponse, entity);
+        Role role = RoleEntityHelper.createRoleEntity();
+        RoleJsonObject jsonObject = RoleJsonHelper.mapEntityToJsonObject(role);
+        String jsonString = JsonObjectHelper.generateObjectToJsonString(jsonObject);
+        RoleJsonObject actualResultJson = HttpHelper.postMethod(REQUEST_URL, CREATE_ROLE, JSON, JSON, jsonString, 201, RoleJsonObject.class);
+        jsonObject.setId(actualResultJson.getId());
+        RoleDao.getInstance().deleteRole(actualResultJson.getId());
+        Assert.assertEquals(actualResultJson, jsonObject);
     }
 
-    @Test(description = "GET. Role controller get role by id -> /role/{id}")
+    @Test(description = "GET. Role controller get user role by id -> /role/{id}")
     static void getRoleByIdTest() {
-        Role entity = Role.builder()
-                .roleName("AUTOMATION_TESTING")
-                .descriptionRu("Автоматизация тестирования")
-                .descriptionEn("Automation test")
-                .build();
-        Role roleOptional = RoleDao.getInstance().saveRole(entity);
-        String responseJsonAsString = given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, GET_ROLE_BY_ID))
-                .pathParam("id", roleOptional.getId())
-                .when()
-                .get()
-                .then()
-                .spec(HttpHelper.setResponseSpec(JSON,200))
-                .extract()
-                .asString();
-        Class<Role> roleClass = Role.class;
-        Role controllerResponse = JsonObjectHelper.generateJsonToObject(responseJsonAsString, roleClass);
-        RoleDao.getInstance().deleteRole(roleOptional.getId());
-        Assert.assertEquals(controllerResponse, entity);
+        Role role = RoleEntityHelper.createRoleEntity();
+        id = RoleEntityHelper.saveRoleInDataBaseAndGetId(role);
+        role.setId(id);
+        RoleJsonObject expectedResult = RoleJsonHelper.mapEntityToJsonObject(role);
+        RoleJsonObject actualResult = HttpHelper.getMethodByPath(REQUEST_URL, GET_ROLE_BY_ID, "id", JSON, id, 200, RoleJsonObject.class);
+        RoleDao.getInstance().deleteRole(id);
+        Assert.assertEquals(actualResult, expectedResult);
     }
 
-    @Test(description = "DELETE.DRole controller get role by id -> /role/{id}")
-    static void deleteRoleTest() {
-        Role entity = Role.builder()
-                .roleName("QA")
-                .descriptionRu("Тестировщик ПО")
-                .descriptionEn("QA manual")
-                .build();
-        Role roleInDataBase = RoleDao.getInstance().saveRole(entity);
-        entity.setId(roleInDataBase.getId());
-        given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, GET_ROLE_BY_ID))
-                .pathParam("id", roleInDataBase.getId())
-                .when()
-                .delete()
-                .then()
-                .statusCode(200);
-        Optional<Role> optionalRole = RoleDao.getInstance().getOne(roleInDataBase.getId());
-        Assert.assertTrue(optionalRole.isEmpty());
-    }
-
+    //TODO BUG
     @Test(description = "PUT. Role controller update user role -> /role/{id}")
     static void updateRoleTest() {
-        Role entity = Role.builder()
-                .roleName("AQa")
-                .descriptionRu("Автоматизатор ПО")
-                .descriptionEn("AQA engineer")
-                .build();
-        Role roleInDataBase = RoleDao.getInstance().saveRole(entity);
-        entity.setId(roleInDataBase.getId());
-        entity = stringToUpperCase(entity);
-        String requestBody = JsonObjectHelper.generateObjectToJson(entity);
-        Role roleAfterUpdate = given()
-                .spec(HttpHelper.setRequestSpec(REQUEST_URL, JSON, GET_ROLE_BY_ID))
-                .pathParam("id", roleInDataBase.getId())
-                .body(requestBody)
-                .when()
-                .put()
-                .then()
-                .spec(HttpHelper.setResponseSpec(JSON,200))
-                .extract()
-                .as(Role.class);
-        RoleDao.getInstance().deleteRole(roleInDataBase.getId());
-        Assert.assertEquals(roleAfterUpdate, entity);
+        Role role = RoleEntityHelper.createRoleEntity();
+        id = RoleEntityHelper.saveRoleInDataBaseAndGetId(role);
+        role = RoleEntityHelper.updateRole(role);
+        RoleJsonObject expectedResult = RoleJsonHelper.mapEntityToJsonObject(role);
+        String requestBody = JsonObjectHelper.generateObjectToJsonString(expectedResult);
+        RoleJsonObject actualResult = HttpHelper.putMethodUpdateById(REQUEST_URL, UPDATE_ROLE_BY_ID, requestBody, "id", JSON, id, 200, RoleJsonObject.class);
+        RoleDao.getInstance().deleteRole(id);
+        Assert.assertEquals(actualResult, expectedResult);
     }
 
-    @SneakyThrows
-    private static void loadDriver() {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-    }
-
-    private static Role stringToUpperCase(Role entity) {
-        return Role.builder()
-                .id(entity.getId())
-                .roleName(entity.getRoleName().toUpperCase())
-                .descriptionRu(entity.getDescriptionRu().toUpperCase())
-                .descriptionEn(entity.getDescriptionEn().toUpperCase())
-                .build();
+    @Test(description = "DELETE. Role controller delete user role by id -> /role/{id}")
+    static void deleteRoleTest() {
+        Role role = RoleEntityHelper.createRoleEntity();
+        id = RoleEntityHelper.saveRoleInDataBaseAndGetId(role);
+        HttpHelper.deleteMethod(REQUEST_URL, DELETE_ROLE_BY_ID, "id", id, 200);
+        Assert.assertNull(RoleEntityHelper.getRoleFromDataBaseById(id));
     }
 }
