@@ -9,7 +9,8 @@ public class City {
 
     private Integer id;
     private String postIndex;
-    private Country country;
+    private Integer countryId;
     private String cityNameRu;
     private String cityNameEn;
+    private Boolean visibility;
 }

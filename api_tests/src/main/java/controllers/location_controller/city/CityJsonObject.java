@@ -10,20 +10,23 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityItem{
+public class CityJsonObject {
 
-	@JsonProperty("cityName")
-	private String cityName;
+	@JsonProperty("id")
+	private Integer id;
 
 	@JsonProperty("postIndex")
 	private String postIndex;
 
+	@JsonProperty("countryId")
+	private Integer countryId;
+
 	@JsonProperty("countryName")
 	private String countryName;
 
-	@JsonProperty("id")
-	private int id;
+	@JsonProperty("cityName")
+	private String cityName;
 
-	@JsonProperty("countryId")
-	private int countryId;
+	@JsonProperty("visibility")
+	private Boolean visibility;
 }
