@@ -8,8 +8,7 @@ import pages.LoginPage;
 import static junit.framework.Assert.assertEquals;
 
 public class ExitApplicationTest extends CommonConditions {
-    private static final String EMAIL = "huntflow-test-16@andersenlab.com";
-    private static final String PASSWORD = "159753CFThn";
+
     private static final String LOGIN_PAGE_URL = "https://crm-trainee-react-dev.andersenlab.dev/login";
     //TODO
     @Test(groups = {"valid_user"}, description = "ЮС 4.2.")

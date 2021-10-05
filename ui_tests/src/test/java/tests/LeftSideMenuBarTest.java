@@ -17,7 +17,7 @@ public class LeftSideMenuBarTest extends CommonConditions {
                 "Канбан доска", "Заявки", "Кандидаты", "Статистика", "Настройки", "Поиск кандидата",
                 "Уведомления", "Пользователи", "Мой Профиль");
         //User testUser = UserCreator.withCredentialsFromProperty();
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         List<String> resultNamesList = new LoginPage(driver)
                 .openPage()
                 .login(testUser)
@@ -31,7 +31,7 @@ public class LeftSideMenuBarTest extends CommonConditions {
         boolean actualResult;
         boolean flagLeftSideMenuBarIsOpen;
         //User testUser = UserCreator.withCredentialsFromProperty();
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         flagLeftSideMenuBarIsOpen = new LoginPage(driver)
                 .openPage()
                 .login(testUser)

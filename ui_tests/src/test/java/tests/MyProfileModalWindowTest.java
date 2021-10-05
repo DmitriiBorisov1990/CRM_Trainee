@@ -20,7 +20,7 @@ public class MyProfileModalWindowTest extends CommonConditions {
 
     @Test(groups = {"valid_user"}, description = "ЮС 5.2.1.")
     public static void myProfileMenuBarContentTest() {
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         List<String> namesList = Arrays.asList("Мой профиль", "Telegram admin", "Jira", "Support", "Выйти");
         List<String> actualResult = new LoginPage(driver)
                 .openPage()
@@ -34,7 +34,7 @@ public class MyProfileModalWindowTest extends CommonConditions {
     //TODO
     @Test(groups = {"valid_user"}, description = "Переход на страницу поддержки")
     public static void supportPageAcesTest() {
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         new LoginPage(driver)
                 .openPage()
                 .login(testUser)
@@ -47,7 +47,7 @@ public class MyProfileModalWindowTest extends CommonConditions {
 
     @Test(groups = {"valid_user"}, description = "https://jira.andersenlab.com/secure/Dashboard.jspa")
     public static void jiraPageAcesTest() {
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         new LoginPage(driver)
                 .openPage()
                 .login(testUser)
@@ -61,7 +61,7 @@ public class MyProfileModalWindowTest extends CommonConditions {
     @Ignore
     @Test(groups = {"valid_user"}, description = "Переход на страницу с Telegram")
     public static void telegramAdminPageAcesTest() {
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         new LoginPage(driver)
                 .openPage()
                 .login(testUser)
