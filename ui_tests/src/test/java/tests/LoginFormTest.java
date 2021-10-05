@@ -22,7 +22,7 @@ public class LoginFormTest extends CommonConditions {
     @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.1.")
     public static void checkEmailErrorMessage() {
         //User testUserEmptyEmail = UserCreator.withCredentialsFromProperty();
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         String emptyFieldMessageText = new LoginPage(driver)
                 .openPage()
                 .fillInEmailWindow(testUser)
@@ -35,7 +35,7 @@ public class LoginFormTest extends CommonConditions {
     @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.2.")
     public static void checkPasswordErrorMessage() {
         //User testUserEmptyPassword = UserCreator.withCredentialsFromProperty();
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         String emptyFieldMessageText = new LoginPage(driver)
                 .openPage()
                 .fillInEmailWindow(testUser)
@@ -48,7 +48,7 @@ public class LoginFormTest extends CommonConditions {
     @Test(groups = {"invalid_user"}, description = "ЮС 4.1.4.3.")
     public static void checkInvalidDomainNameMessage() {
         //User testUserInvalidEmailDomain = UserCreator.withCredentialsFromProperty();
-        User testUser = new User("huntflow-test-16@gmail.com", "159753CFThn");
+        User testUser = new User("huntflow-test-16@gmail.com", PASSWORD);
         String invalidDomainNameMessageText = new LoginPage(driver)
                 .openPage()
                 .fillInEmailWindow(testUser)
@@ -71,10 +71,10 @@ public class LoginFormTest extends CommonConditions {
         assertEquals(NOT_VALID_USER, notAuthorizedErrorMessage);
     }
 
-    @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.5.")
+    @Test(groups = {"invalid_user"}, description = "ЮС 4.1.4.5.")
     public static void notValidPasswordMessage() {
         //User testValidUserWithInvalidPassword = UserCreator.withCredentialsFromProperty();
-        User testUser = new User("huntflow-test-16@andersenlab.com", "wrong_pass123");
+        User testUser = new User(EMAIL, "wrong_pass123");
         String invalidPassword = new LoginPage(driver)
                 .openPage()
                 .fillInEmailWindow(testUser)
@@ -87,7 +87,7 @@ public class LoginFormTest extends CommonConditions {
     @Test(groups = {"valid_user"}, description = "ЮС 4.1.4.6.")
     public static void noInternet() throws IOException {
         //User testValidUserWithInvalidPassword = UserCreator.withCredentialsFromProperty();
-        User testUser = new User("huntflow-test-16@andersenlab.com", "159753CFThn");
+        User testUser = new User(EMAIL, PASSWORD);
         LoginPage loginPage = new LoginPage(driver)
                 .openPage()
                 .fillInEmailWindow(testUser)

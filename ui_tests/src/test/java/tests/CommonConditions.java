@@ -9,7 +9,10 @@ import util.TestListener;
 
 @Listeners({TestListener.class})
 public class CommonConditions {
+
     protected static WebDriver driver;
+    protected static final String PASSWORD = "159753CFThn";
+    protected static final String EMAIL = "huntflow-test-16@andersenlab.com";
 
     @BeforeMethod(alwaysRun = true)
     public static void setUp() {

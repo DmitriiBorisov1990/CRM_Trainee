@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OfficeItem {
+public class OfficeJsonObject {
 
     @JsonProperty("id")
     private int id;
