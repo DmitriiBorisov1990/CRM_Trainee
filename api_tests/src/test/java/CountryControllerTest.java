@@ -8,26 +8,34 @@ import utils.JsonObjectHelper;
 import utils.country.CountryEntityHelper;
 import utils.country.CountryJsonHelper;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class CountryControllerTest extends BaseTest {
-    private static int id;
-    private static final String REQUEST_URL = "http://10.10.15.160:8080";
+
+    private static CountryDao countryDao = CountryDao.getInstance();
     private static final String ADD_NEW_COUNTRY = "/api/location/country?lang=en";
     private static final String GET_ALL_COUNTRY = "/api/location/country?lang=en";
     private static final String GET_COUNTRY_BY_ID = "/api/location/country/{id}/?lang=ru";
     private static final String DELETE_COUNTRY_BY_ID = "/api/location/country/{id}?lang=en";
     private static final String UPDATE_COUNTRY_BY_ID = "/api/location/country/{id}?lang=en";
 
-
-    //TODO ?
     @Test(description = "GET. Get all countries -> /location/country")
     static void getAllCountryTest(){
-        String jsonString = HttpHelper.getMethodGetAll(REQUEST_URL,GET_ALL_COUNTRY,JSON,200);
-        //System.out.println(JsonObjectHelper.stringToObjects(jsonString, CountryJsonObject.class));
-        Assert.assertTrue(JsonObjectHelper.stringToObjects(jsonString, CountryJsonObject.class).size() == CountryDao.getInstance().getAll().size());
+        Set<Integer> countryIdFromDataBase = countryDao.getAll()
+                .stream()
+                .map(Country::getId)
+                .collect(Collectors.toSet());
+        Set<Integer> countryIdFromJsonResponse = JsonObjectHelper
+                .stringToObjects(HttpHelper.getMethodGetAll(REQUEST_URL,GET_ALL_COUNTRY,JSON,200),CountryJsonObject.class)
+                .stream()
+                .map(CountryJsonObject::getId)
+                .collect(Collectors.toSet());
+        Assert.assertTrue(countryIdFromDataBase.containsAll(countryIdFromJsonResponse));
     }
 
     //TODO 201 code
@@ -38,7 +46,7 @@ public class CountryControllerTest extends BaseTest {
         id =  HttpHelper.postMethod(REQUEST_URL,JSON,ADD_NEW_COUNTRY,jsonString,200,CountryJsonObject.class,"id");
         expectedResult.setId(id);
         Country countryInDataBase = CountryEntityHelper.getCountryFromDataBaseById(id);
-        CountryJsonObject actualResult = CountryJsonHelper.mapEntityToJsonObject(countryInDataBase);
+        CountryJsonObject actualResult = CountryJsonHelper.mapEntityToJsonObject();
         CountryDao.getInstance().deleteCountry(id);
         assertThat(expectedResult, is(actualResult));
     }
@@ -48,7 +56,7 @@ public class CountryControllerTest extends BaseTest {
         Country country = CountryEntityHelper.createCountryEntity();
         id = CountryEntityHelper.saveCountryInDataBaseAndGetId(country);
         country.setId(id);
-        CountryJsonObject expectedResult = CountryJsonHelper.mapEntityToJsonObject(country);
+        CountryJsonObject expectedResult = CountryJsonHelper.mapEntityToJsonObject();
         CountryJsonObject actualResult = HttpHelper.getMethodByPath(REQUEST_URL,GET_COUNTRY_BY_ID,"id",JSON,id,200,CountryJsonObject.class);
         CountryDao.getInstance().deleteCountry(id);
         assertThat(expectedResult, is(actualResult));
@@ -59,8 +67,8 @@ public class CountryControllerTest extends BaseTest {
         Country country = CountryEntityHelper.createCountryEntity();
         id = CountryEntityHelper.saveCountryInDataBaseAndGetId(country);
         country.setId(id);
-        country = CountryEntityHelper.updateCountry(country);
-        CountryJsonObject expectedResult = CountryJsonHelper.mapEntityToJsonObject(country);
+        country = CountryEntityHelper.updateCountry();
+        CountryJsonObject expectedResult = CountryJsonHelper.mapEntityToJsonObject();
         String requestBody = JsonObjectHelper.generateObjectToJsonString(expectedResult);
         CountryJsonObject actualResult = HttpHelper.putMethodUpdateById(REQUEST_URL, UPDATE_COUNTRY_BY_ID, requestBody, "id", JSON, id, 200, CountryJsonObject.class);
         CountryDao.getInstance().deleteCountry(id);

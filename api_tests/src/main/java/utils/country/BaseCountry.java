@@ -1,10 +1,16 @@
 package utils.country;
 
-abstract class BaseCountry {
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    protected static Integer id;
-    protected static String countryCode2 = "BE";
-    protected static String countryCode3 = "BEL";
-    protected static String countryNameRu = "Бельгия";
-    protected static String countryNameEn = "Belgique";
+@Data
+@NoArgsConstructor
+class BaseCountry {
+
+    private Integer id;
+    private String countryCode2 = "BE";
+    private String countryCode3 = "BEL";
+    private String countryNameRu = "Бельгия";
+    private String countryNameEn = "Belgique";
+    private Boolean visibility = true;
 }

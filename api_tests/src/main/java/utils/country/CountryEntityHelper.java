@@ -5,34 +5,36 @@ import entity.Country;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class CountryEntityHelper extends BaseCountry {
+public class CountryEntityHelper {
 
     public static Country createCountryEntity() {
+        BaseCountry baseCountry = new BaseCountry();
         return Country.builder()
-                .countryCode2(countryCode2)
-                .countryCode3(countryCode3)
-                .countryNameRu(countryNameRu)
-                .countryNameEn(countryNameEn)
-                .visibility(true)
+                .countryCode2(baseCountry.getCountryCode2())
+                .countryCode3(baseCountry.getCountryCode3())
+                .countryNameRu(baseCountry.getCountryNameRu())
+                .countryNameEn(baseCountry.getCountryNameEn())
+                .visibility(baseCountry.getVisibility())
                 .build();
     }
 
-    public static Country updateCountry(Country country) {
+    public static Country updateCountry() {
+        Country country = createCountryEntity();
         return Country.builder()
                 .id(country.getId())
-                .countryCode2(country.getCountryCode2().toUpperCase())
-                .countryCode3(country.getCountryCode3().toUpperCase())
+                .countryCode2(country.getCountryCode2())
+                .countryCode3(country.getCountryCode3())
                 .countryNameRu(country.getCountryNameRu().toUpperCase())
                 .countryNameEn(country.getCountryNameEn().toUpperCase())
-                .visibility(true)
+                .visibility(country.getVisibility())
                 .build();
-    }
-
-    public static Country getCountryFromDataBaseById(int id){
-        return CountryDao.getInstance().getOne(id);
     }
 
     public static int saveCountryInDataBaseAndGetId(Country country){
         return CountryDao.getInstance().saveCountry(country).getId();
+    }
+
+    public static Country getCountryFromDataBaseById(int id){
+        return CountryDao.getInstance().getOne(id);
     }
 }

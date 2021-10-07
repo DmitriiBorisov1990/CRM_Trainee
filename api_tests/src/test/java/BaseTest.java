@@ -3,18 +3,15 @@ import org.testng.annotations.BeforeTest;
 import utils.Authorization;
 
 public abstract class BaseTest {
-    private static Integer id;
+
+    protected static Integer id;
+    protected static String REQUEST_URL = "http://10.10.15.160:8080";
 
     @BeforeTest
     protected void authorization() {
         Authorization.login();
         loadDriver();
     }
-
-    //TODO
-    /*protected static void deleteEntity(int id) {
-        CountryDao.getInstance().deleteCountry(id);
-    }*/
 
     @SneakyThrows
     private static void loadDriver() {

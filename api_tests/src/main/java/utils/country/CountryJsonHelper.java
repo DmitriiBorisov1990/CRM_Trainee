@@ -5,27 +5,29 @@ import entity.Country;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class CountryJsonHelper extends BaseCountry {
+public class CountryJsonHelper {
 
     public static CountryJsonObject createJsonObject(){
+        Country country = CountryEntityHelper.createCountryEntity();
         return CountryJsonObject.builder()
-                .id(id)
-                .countryCode2(countryCode2)
-                .countryCode3(countryCode3)
-                .countryNameRu(countryNameRu)
-                .countryNameEn(countryNameEn)
-                .visibility(true)
+                .id(country.getId())
+                .countryCode2(country.getCountryCode2())
+                .countryCode3(country.getCountryCode3())
+                .countryNameRu(country.getCountryNameRu())
+                .countryNameEn(country.getCountryNameEn())
+                .visibility(country.getVisibility())
                 .build();
     }
 
-    public static CountryJsonObject mapEntityToJsonObject(Country entity){
+    public static CountryJsonObject mapEntityToJsonObject(){
+        Country country = CountryEntityHelper.updateCountry();
         return CountryJsonObject.builder()
-                .id(entity.getId())
-                .countryCode2(entity.getCountryCode2())
-                .countryCode3(entity.getCountryCode3())
-                .countryNameRu(entity.getCountryNameRu())
-                .countryNameEn(entity.getCountryNameEn())
-                .visibility(entity.getVisibility())
+                .id(country.getId())
+                .countryCode2(country.getCountryCode2())
+                .countryCode3(country.getCountryCode3())
+                .countryNameRu(country.getCountryNameRu())
+                .countryNameEn(country.getCountryNameEn())
+                .visibility(country.getVisibility())
                 .build();
     }
 }
