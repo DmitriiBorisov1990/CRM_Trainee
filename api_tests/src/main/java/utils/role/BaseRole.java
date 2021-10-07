@@ -1,9 +1,14 @@
 package utils.role;
 
-abstract class BaseRole {
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    protected static Integer id;
-    protected static String roleName = "AQA";
-    protected static String descriptionRu = "Инженер по автоматизации ПО";
-    protected static String descriptionEn = "QA automation engineer";
+@Data
+@NoArgsConstructor
+class BaseRole {
+
+    private Integer id;
+    private String roleName = "AQA";
+    private String descriptionRu = "Инженер по автоматизации ПО";
+    private String descriptionEn = "QA automation engineer";
 }
