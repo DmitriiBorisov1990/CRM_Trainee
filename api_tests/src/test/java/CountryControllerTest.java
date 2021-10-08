@@ -24,7 +24,7 @@ public class CountryControllerTest extends BaseTest {
     private static final String DELETE_COUNTRY_BY_ID = "/api/location/country/{id}?lang=en";
     private static final String UPDATE_COUNTRY_BY_ID = "/api/location/country/{id}?lang=en";
 
-    @Test(description = "GET. Get all countries -> /location/country")
+    @Test(description = "C5564998 Получение списка всех стран от имени РОС админ")
     static void getAllCountryTest(){
         Set<Integer> countryIdFromDataBase = countryDao.getAll()
                 .stream()
@@ -39,39 +39,45 @@ public class CountryControllerTest extends BaseTest {
     }
 
     //TODO 201 code
-    @Test(description = "POST. Create new country -> /location/country")
+    @Test(description = "C5564895 Создание страны от имени РОС-администратора")
     static void createCountryTest() {
         CountryJsonObject expectedResult = CountryJsonHelper.createJsonObject();
-        String jsonString = JsonObjectHelper.generateObjectToJsonString(expectedResult);
-        id =  HttpHelper.postMethod(REQUEST_URL,JSON,ADD_NEW_COUNTRY,jsonString,200,CountryJsonObject.class,"id");
-        expectedResult.setId(id);
-        Country countryInDataBase = CountryEntityHelper.getCountryFromDataBaseById(id);
-        CountryJsonObject actualResult = CountryJsonHelper.mapEntityToJsonObject();
-        CountryDao.getInstance().deleteCountry(id);
+        CountryJsonObject actualResult =  HttpHelper
+                .postMethod(REQUEST_URL,JSON,ADD_NEW_COUNTRY,JsonObjectHelper.generateObjectToJsonString(expectedResult),200,CountryJsonObject.class);
+        expectedResult.setId(actualResult.getId());
+        countryDao.deleteCountry(actualResult.getId());
         assertThat(expectedResult, is(actualResult));
     }
 
-    @Test(description = "GET. Get country by id -> /location/country/{id}?lang=ru")
+    @Test(description = "Получение названия страны по ID как РОС админ")
     static void getCountryByIdTest() {
-        Country country = CountryEntityHelper.createCountryEntity();
-        id = CountryEntityHelper.saveCountryInDataBaseAndGetId(country);
-        country.setId(id);
-        CountryJsonObject expectedResult = CountryJsonHelper.mapEntityToJsonObject();
-        CountryJsonObject actualResult = HttpHelper.getMethodByPath(REQUEST_URL,GET_COUNTRY_BY_ID,"id",JSON,id,200,CountryJsonObject.class);
-        CountryDao.getInstance().deleteCountry(id);
+        id = 1;
+        CountryJsonObject expectedResult = CountryJsonObject.builder()
+                .id(id)
+                .countryCode2("BY")
+                .countryCode3("BLR")
+                .countryNameRu("Беларусь")
+                .countryNameEn("Belarus")
+                .visibility(true)
+                .build();
+        CountryJsonObject actualResult = HttpHelper
+                .getMethodByPath(REQUEST_URL,GET_COUNTRY_BY_ID,"id",JSON,id,200,CountryJsonObject.class);
         assertThat(expectedResult, is(actualResult));
     }
 
-    @Test(description = "PUT. Update country by id -> /location/country/{id}")
+    @Test(description = "C5564970 Обновление страны как РОС админ")
     static void updateCountryTest() {
-        Country country = CountryEntityHelper.createCountryEntity();
-        id = CountryEntityHelper.saveCountryInDataBaseAndGetId(country);
-        country.setId(id);
-        country = CountryEntityHelper.updateCountry();
-        CountryJsonObject expectedResult = CountryJsonHelper.mapEntityToJsonObject();
+        id = 18;
+        CountryJsonObject expectedResult = CountryJsonObject.builder()
+                .countryCode2("FR")
+                .countryCode3("FRC")
+                .countryNameEn("France")
+                .countryNameRu("Франция")
+                .visibility(true)
+                .build();
         String requestBody = JsonObjectHelper.generateObjectToJsonString(expectedResult);
         CountryJsonObject actualResult = HttpHelper.putMethodUpdateById(REQUEST_URL, UPDATE_COUNTRY_BY_ID, requestBody, "id", JSON, id, 200, CountryJsonObject.class);
-        CountryDao.getInstance().deleteCountry(id);
+        expectedResult.setId(actualResult.getId());
         assertThat(expectedResult, is(actualResult));
     }
 

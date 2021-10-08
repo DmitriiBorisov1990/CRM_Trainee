@@ -10,15 +10,16 @@ public class CountryJsonHelper {
     public static CountryJsonObject createJsonObject(){
         Country country = CountryEntityHelper.createCountryEntity();
         return CountryJsonObject.builder()
-                .id(country.getId())
                 .countryCode2(country.getCountryCode2())
                 .countryCode3(country.getCountryCode3())
                 .countryNameRu(country.getCountryNameRu())
                 .countryNameEn(country.getCountryNameEn())
+                .id(country.getId())
                 .visibility(country.getVisibility())
                 .build();
     }
 
+    //TODO
     public static CountryJsonObject mapEntityToJsonObject(){
         Country country = CountryEntityHelper.updateCountry();
         return CountryJsonObject.builder()

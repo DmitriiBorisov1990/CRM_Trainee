@@ -40,7 +40,7 @@ public class CityControllerTest extends BaseTest {
         String countryNameEn = country.getCountryNameEn();
         CityJsonObject expectedResult = CityJsonHelper.createJsonObject(countryId, countryNameEn);
         String jsonString = JsonObjectHelper.generateObjectToJsonString(expectedResult);
-        id = HttpHelper.postMethod(REQUEST_URL, JSON, ADD_NEW_CITY, jsonString, 200, CityJsonObject.class, "id");
+        //id = HttpHelper.postMethod(REQUEST_URL, JSON, ADD_NEW_CITY, jsonString, 200, CityJsonObject.class);
         expectedResult.setId(id);
         City cityInDataBase = CityEntityHelper.getCityFromDataBaseById(id);
         CityJsonObject actualResult = CityJsonHelper.mapEntityToJsonObject(cityInDataBase, countryNameEn);

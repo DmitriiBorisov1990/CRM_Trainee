@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 class BaseCountry {
 
-    private Integer id;
-    private String countryCode2 = "BE";
-    private String countryCode3 = "BEL";
-    private String countryNameRu = "Бельгия";
-    private String countryNameEn = "Belgique";
+    private Integer id = 0;
+    private String countryCode2 = "IS";
+    private String countryCode3 = "ISL";
+    private String countryNameRu = "Исландия";
+    private String countryNameEn = "Island";
     private Boolean visibility = true;
 }

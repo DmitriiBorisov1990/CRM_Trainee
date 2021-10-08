@@ -10,6 +10,7 @@ public class CountryEntityHelper {
     public static Country createCountryEntity() {
         BaseCountry baseCountry = new BaseCountry();
         return Country.builder()
+                .id(baseCountry.getId())
                 .countryCode2(baseCountry.getCountryCode2())
                 .countryCode3(baseCountry.getCountryCode3())
                 .countryNameRu(baseCountry.getCountryNameRu())

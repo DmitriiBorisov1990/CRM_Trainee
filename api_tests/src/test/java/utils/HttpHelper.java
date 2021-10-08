@@ -35,7 +35,7 @@ public class HttpHelper {
                 .build();
     }
 
-    public static <T> int postMethod(String baseUrl, ContentType contentType, String uri, String jsonString, int responseStatusCode, Class<T> t, String setPathName) {
+    public static <T> T postMethod(String baseUrl, ContentType contentType, String uri, String jsonString, int responseStatusCode, Class<T> t) {
         return given()
                 .spec(setRequestSpec(baseUrl, contentType, uri))
                 .body(jsonString)
@@ -43,8 +43,8 @@ public class HttpHelper {
                 .post()
                 .then()
                 .spec(setResponseSpec(contentType, responseStatusCode))
-                .extract()
-                .path(setPathName);
+                .extract().as(t);
+
     }
 
     public static String getMethodGetAll(String baseUrl, String uri, ContentType responseContentType, int statusCode) {
