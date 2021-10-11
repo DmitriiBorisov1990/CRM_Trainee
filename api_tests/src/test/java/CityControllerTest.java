@@ -1,19 +1,11 @@
 import controllers.location_controller.city.CityJsonObject;
 import dao.CityDao;
-import dao.CountryDao;
-import entity.City;
-import entity.Country;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.HttpHelper;
 import utils.JsonObjectHelper;
-import utils.city.CityEntityHelper;
-import utils.city.CityJsonHelper;
-import utils.country.CountryEntityHelper;
 
 import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 public class CityControllerTest extends BaseTest {
 
@@ -33,7 +25,7 @@ public class CityControllerTest extends BaseTest {
         Assert.assertTrue(JsonObjectHelper.stringToObjects(jsonString, CityJsonObject.class).size() == CityDao.getInstance().getAll().size());
     }
 
-    @Test(description = "POST. Create new city -> /location/city")
+    /*@Test(description = "POST. Create new city -> /location/city")
     static void createCityTest() {
         Country country = CountryEntityHelper.createCountryEntity();
         int countryId = CountryEntityHelper.saveCountryInDataBaseAndGetId(country);
@@ -47,9 +39,9 @@ public class CityControllerTest extends BaseTest {
         CityDao.getInstance().deleteCity(id);
         CountryDao.getInstance().deleteCountry(countryId);
         assertThat(expectedResult, is(actualResult));
-    }
+    }*/
 
-    @Test(description = "GET. Get city by id -> /location/city/{id}?lang=ru")
+    /*@Test(description = "GET. Get city by id -> /location/city/{id}?lang=ru")
     static void getCityByIdTest() {
         Country country = CountryEntityHelper.createCountryEntity();
         int countryId = CountryEntityHelper.saveCountryInDataBaseAndGetId(country);
@@ -62,9 +54,9 @@ public class CityControllerTest extends BaseTest {
         CityDao.getInstance().deleteCity(id);
         CountryDao.getInstance().deleteCountry(city.getCountryId());
         assertThat(expectedResult, is(actualResult));
-    }
+    }*/
 
-    @Test(description = "PUT. Update city by id -> /location/city/{id}")
+    /*@Test(description = "PUT. Update city by id -> /location/city/{id}")
     static void updateCityTest() {
         Country country = CountryEntityHelper.createCountryEntity();
         int countryId = CountryEntityHelper.saveCountryInDataBaseAndGetId(country);
@@ -79,9 +71,9 @@ public class CityControllerTest extends BaseTest {
         CityDao.getInstance().deleteCity(id);
         CountryDao.getInstance().deleteCountry(city.getCountryId());
         assertThat(expectedResult, is(actualResult));
-    }
+    }*/
 
-    @Test(description = "DELETE. Delete city by id -> /location/city/{id}")
+    /*@Test(description = "DELETE. Delete city by id -> /location/city/{id}")
     static void deleteCityTest() {
         Country country = CountryEntityHelper.createCountryEntity();
         int countryId = CountryEntityHelper.saveCountryInDataBaseAndGetId(country);
@@ -90,5 +82,5 @@ public class CityControllerTest extends BaseTest {
         HttpHelper.deleteMethod(REQUEST_URL, DELETE_CITY_BY_ID, "id", id, 200);
         CountryDao.getInstance().deleteCountry(countryId);
         Assert.assertNull(CityEntityHelper.getCityFromDataBaseById(id));
-    }
+    }*/
 }

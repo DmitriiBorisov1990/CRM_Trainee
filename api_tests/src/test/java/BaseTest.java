@@ -1,13 +1,13 @@
 import lombok.SneakyThrows;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import utils.Authorization;
 
 public abstract class BaseTest {
 
     protected static Integer id;
-    protected static String REQUEST_URL = "http://10.10.15.160:8080";
+    protected static final String REQUEST_URL = "http://10.10.15.160:8080";
 
-    @BeforeTest
+    @BeforeClass
     protected void authorization() {
         Authorization.login();
         loadDriver();
