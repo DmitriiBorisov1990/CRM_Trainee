@@ -1,30 +1,38 @@
 package utils.city;
 
 import controllers.location_controller.city.CityJsonObject;
+import dao.CountryDao;
 import entity.City;
+import entity.Country;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class CityJsonHelper extends BaseCity {
+public class CityJsonHelper {
 
-    public static CityJsonObject createJsonObject(int countryId,String countryName){
+    private static String postIndex = "3639892";
+    private static String cityName = "Reykjavik";
+    private static City city = City.getCity();
+    private static Country country = Country.getCountry();
+    private CountryDao countryDao = CountryDao.getInstance();
+
+    public static CityJsonObject createJsonObject() {
+        country = countryDao.saveCountry(country);
+        city.setCountry(country);
         return CityJsonObject.builder()
-                .id(id)
-                .postIndex(postIndex)
-                .countryId(countryId)
-                .countryName(countryName)
-                .cityName(cityNameEn)
-                .visibility(visibility)
+                .postIndex(city.getPostIndex())
+                .countryId(city.getCountry().getId())
+                .cityName(city.getCityNameEn())
+                .visibility(city.getVisibility())
                 .build();
     }
-    // TODO ?
-    public static CityJsonObject mapEntityToJsonObject(City city,String countryNameRu){
+
+    public static CityJsonObject changeCityNameAndPostIndex(){
+        city.setPostIndex(postIndex);
+        city.setCityNameEn(cityName);
         return CityJsonObject.builder()
-                .id(city.getId())
                 .postIndex(city.getPostIndex())
-                .countryId(city.getCountryId())
-                .countryName(countryNameRu)
-                .cityName(city.getCityNameRu())
+                .countryId(city.getCountry().getId())
+                .countryName(city.getCityNameEn())
                 .visibility(city.getVisibility())
                 .build();
     }

@@ -1,4 +1,4 @@
-import org.testng.annotations.Test;
+
 
 public class OfficeControllerTest extends BaseTest {
 
@@ -11,7 +11,6 @@ public class OfficeControllerTest extends BaseTest {
     //private static final String UPDATE_CITY_BY_ID = "/api/location/city/{id}?lang=en";
 
     //TODO extract all id and compare them
-    @Test(description = "GET. Get all offices -> /location/office")
     static void getAllOfficeTest() {
         /*Set<Integer> idFromDataBase = OfficeDao.getAll().stream().map(Office::getId).collect(Collectors.toSet());
         String jsonResponse = HttpHelper.getMethodGetAll(REQUEST_URL, GET_ALL_OFFICE, JSON, 200);
@@ -19,7 +18,6 @@ public class OfficeControllerTest extends BaseTest {
         Assert.assertTrue(idFromDataBase.containsAll(idFromJson));*/
     }
 
-    @Test(description = "POST. Create new office -> /location/city")
     static void createOfficeTest() {
         //Office office = OfficeEntityHelper.createOfficeEntity();
     }

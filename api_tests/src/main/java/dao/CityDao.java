@@ -1,6 +1,7 @@
 package dao;
 
 import entity.City;
+import entity.Country;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,12 +19,21 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 public class CityDao {
 
     private static final CityDao INSTANCE = new CityDao();
-    private static final String GET_ALL = "SELECT * FROM city";
+    private static final CountryDao countryDao = CountryDao.getInstance();
+    private static final String GET_ALL = "SELECT ci.id, ci.post_index, ci.city_name_ru, ci.city_name_en, ci.visibility, " +
+            "co.id, co.country_code_2, co.country_code_3, co.country_name_ru, co.country_name_en, co.visibility " +
+            "FROM city ci " +
+            "JOIN country co " +
+            "ON ci.country_id  = co.id";
     private static final String DELETE = "DELETE FROM city WHERE id = ?";
-    private static final String GET_CITY_BY_ID = "SELECT* FROM city WHERE id = ?";
+    private static final String GET_CITY_BY_ID = "SELECT ci.id, ci.post_index, ci.city_name_ru, ci.city_name_en, ci.visibility, " +
+            "co.id, co.country_code_2, co.country_code_3, co.country_name_ru, co.country_name_en, co.visibility " +
+            "FROM city ci " +
+            "JOIN country co " +
+            "ON ci.country_id  = co.id " +
+            "WHERE ci.id = ?";
     private static final String SAVE_CITY = "INSERT INTO city(post_index, country_id, city_name_ru, city_name_en, visibility) VALUES(?,?,?,?,?)";
 
-    //TODO
     @SneakyThrows
     public City getOne(int id) {
         City city = null;
@@ -33,12 +43,19 @@ public class CityDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 city = City.builder()
-                        .id(resultSet.getInt("id"))
-                        .postIndex(resultSet.getString("post_index"))
-                        .countryId(resultSet.getInt("country_id"))
-                        .cityNameRu(resultSet.getString("city_name_ru"))
-                        .cityNameEn(resultSet.getString("city_name_en"))
-                        .visibility(resultSet.getBoolean("visibility"))
+                        .id(resultSet.getInt("ci.id"))
+                        .postIndex(resultSet.getString("ci.post_index"))
+                        .country(Country.builder()
+                                .id(resultSet.getInt("co.id"))
+                                .countryCode2(resultSet.getString("co.country_code_2"))
+                                .countryCode3(resultSet.getString("co.country_code_3"))
+                                .countryNameRu(resultSet.getString("co.country_name_ru"))
+                                .countryNameEn(resultSet.getString("co.country_name_en"))
+                                .visibility(resultSet.getBoolean("co.visibility"))
+                                .build())
+                        .cityNameRu(resultSet.getString("ci.city_name_ru"))
+                        .cityNameEn(resultSet.getString("ci.city_name_en"))
+                        .visibility(resultSet.getBoolean("ci.visibility"))
                         .build();
             }
         }
@@ -53,12 +70,19 @@ public class CityDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 City city = City.builder()
-                        .id(resultSet.getInt("id"))
-                        .postIndex(resultSet.getString("post_index"))
-                        .countryId(resultSet.getInt("country_id"))
-                        .cityNameRu(resultSet.getString("city_name_ru"))
-                        .cityNameEn(resultSet.getString("city_name_en"))
-                        .visibility(resultSet.getBoolean("visibility"))
+                        .id(resultSet.getInt("ci.id"))
+                        .postIndex(resultSet.getString("ci.post_index"))
+                        .country(Country.builder()
+                                .id(resultSet.getInt("co.id"))
+                                .countryCode2(resultSet.getString("co.country_code_2"))
+                                .countryCode3(resultSet.getString("co.country_code_3"))
+                                .countryNameRu(resultSet.getString("co.country_name_ru"))
+                                .countryNameEn(resultSet.getString("co.country_name_en"))
+                                .visibility(resultSet.getBoolean("co.visibility"))
+                                .build())
+                        .cityNameRu(resultSet.getString("ci.city_name_ru"))
+                        .cityNameEn(resultSet.getString("ci.city_name_en"))
+                        .visibility(resultSet.getBoolean("ci.visibility"))
                         .build();
                 cityList.add(city);
             }
@@ -67,22 +91,24 @@ public class CityDao {
     }
 
     @SneakyThrows
-    public City saveCity(City entity) {
+    public City saveCity(City city) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_CITY, RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, entity.getPostIndex());
-            preparedStatement.setInt(2, entity.getCountryId());
-            preparedStatement.setString(3, entity.getCityNameRu());
-            preparedStatement.setString(4, entity.getCityNameEn());
-            preparedStatement.setBoolean(5, entity.getVisibility());
+            Country country = countryDao.saveCountry(Country.getCountry());
+            city.setCountry(country);
+            preparedStatement.setString(1, city.getPostIndex());
+            preparedStatement.setObject(2, city.getCountry().getId());
+            preparedStatement.setString(3, city.getCityNameRu());
+            preparedStatement.setString(4, city.getCityNameEn());
+            preparedStatement.setBoolean(5, city.getVisibility());
             if (preparedStatement.executeUpdate() == 1) {
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    entity.setId(generatedKeys.getInt(1));
+                    city.setId(generatedKeys.getInt(1));
                 }
             }
         }
-        return entity;
+        return city;
     }
 
     @SneakyThrows

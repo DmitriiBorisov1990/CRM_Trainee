@@ -14,9 +14,11 @@ import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@Test(priority = 2)
 public class CountryControllerTest extends BaseTest {
 
-    private static CountryDao countryDao = CountryDao.getInstance();
+    private static  int  countryId;
+    private static final CountryDao countryDao = CountryDao.getInstance();
     private static final String ADD_NEW_COUNTRY = "/api/location/country?lang=en";
     private static final String GET_ALL_COUNTRY = "/api/location/country?lang=en";
     private static final String GET_COUNTRY_BY_ID = "/api/location/country/{id}/?lang=ru";
@@ -43,32 +45,32 @@ public class CountryControllerTest extends BaseTest {
         CountryJsonObject expectedResult = CountryJsonHelper.createJsonObject();
         CountryJsonObject actualResult =  HttpHelper
                 .postMethod(REQUEST_URL,JSON,ADD_NEW_COUNTRY,JsonObjectHelper.generateObjectToJsonString(expectedResult),200,CountryJsonObject.class);
-        id = actualResult.getId();
-        expectedResult.setId(id);
+        countryId = actualResult.getId();
+        expectedResult.setId(countryId);
         assertThat(expectedResult, is(actualResult));
     }
 
-    @Test(priority = 2,description = "Получение названия страны по ID как РОС админ")
+    @Test(priority = 2,description = "C5670706 Получение названия страны по ID как РОС админ")
     static void getCountryByIdTest() {
         CountryJsonObject expectedResult = CountryJsonHelper.createJsonObject();
-        expectedResult.setId(id);
+        expectedResult.setId(countryId);
         CountryJsonObject actualResult = HttpHelper
-                .getMethodByPath(REQUEST_URL,GET_COUNTRY_BY_ID,"id",JSON,id,200,CountryJsonObject.class);
+                .getMethodByPath(REQUEST_URL,GET_COUNTRY_BY_ID,"id",JSON,countryId,200,CountryJsonObject.class);
         assertThat(expectedResult, is(actualResult));
     }
 
     @Test(priority = 3,description = "C5564970 Обновление страны как РОС админ")
     static void updateCountryTest() {
-        CountryJsonObject expectedResult = CountryJsonHelper.changeEnAndRuNames();
+        CountryJsonObject expectedResult = CountryJsonHelper.changeCountryName();
         CountryJsonObject actualResult = HttpHelper
-                .putMethodUpdateById(REQUEST_URL, UPDATE_COUNTRY_BY_ID, JsonObjectHelper.generateObjectToJsonString(expectedResult), "id", JSON, id, 200, CountryJsonObject.class);
+                .putMethodUpdateById(REQUEST_URL, UPDATE_COUNTRY_BY_ID, JsonObjectHelper.generateObjectToJsonString(expectedResult), "id", JSON, countryId, 200, CountryJsonObject.class);
         expectedResult.setId(actualResult.getId());
         assertThat(expectedResult, is(actualResult));
     }
 
-    @Test(priority = 4,description = "DELETE. Delete country by id -> /location/country/{id}")
+    @Test(priority = 4,description = "C5670707 Удаление страны от имени РОС-администратора")
     static void deleteCountryTest() {
-        HttpHelper.deleteMethod(REQUEST_URL,DELETE_COUNTRY_BY_ID,"id",id,200);
-        Assert.assertNull(countryDao.getOne(id));
+        HttpHelper.deleteMethod(REQUEST_URL,DELETE_COUNTRY_BY_ID,"id",countryId,200);
+        Assert.assertNull(countryDao.getOne(countryId));
     }
 }

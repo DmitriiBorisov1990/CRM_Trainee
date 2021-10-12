@@ -1,5 +1,3 @@
-import org.testng.annotations.Test;
-
 import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -8,7 +6,6 @@ public class UserControllerTests extends BaseTest {
 
     private static final String REQUEST_URL = "http://10.10.15.160:8080/api/users/";
 
-    @Test
     static void getUserById() {
         /*User testUser = UserDao.getInstance().saveUser(User
                 .builder()
