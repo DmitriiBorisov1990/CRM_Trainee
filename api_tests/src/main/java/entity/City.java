@@ -17,7 +17,6 @@ public class City {
     private String cityNameRu = "Рейкьявик";
     private String cityNameEn = "Reykjavic";
     private Boolean visibility = true;
-
     private static City city = new City();
 
     public static City getCity() {

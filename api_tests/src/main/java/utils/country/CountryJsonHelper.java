@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class CountryJsonHelper {
 
-    private static final Country country = Country.getCountry();
+    private Country country = Country.getCountry();
 
     public static CountryJsonObject createJsonObject() {
         return CountryJsonObject.builder()
@@ -20,9 +20,12 @@ public class CountryJsonHelper {
     }
 
     public static CountryJsonObject changeCountryName() {
-        country.setCountryCode2("IL");
-        country.setCountryCode3("ILD");
-        country.setCountryNameEn("Island");
+        String countryCode2 = "IL";
+        String countryCode3 = "ILD";
+        String countryNameEn = "Island";
+        country.setCountryCode2(countryCode2);
+        country.setCountryCode3(countryCode3);
+        country.setCountryNameEn(countryNameEn);
         return CountryJsonObject.builder()
                 .countryCode2(country.getCountryCode2())
                 .countryCode3(country.getCountryCode3())

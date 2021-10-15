@@ -23,4 +23,7 @@ public class OfficeJsonObject {
 
     @JsonProperty("location")
     private String location;
+
+    @JsonProperty("visibility")
+    private Boolean visibility;
 }

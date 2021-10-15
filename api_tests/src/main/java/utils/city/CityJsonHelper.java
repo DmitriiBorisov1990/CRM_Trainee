@@ -9,10 +9,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class CityJsonHelper {
 
-    private static String postIndex = "3639892";
-    private static String cityName = "Reykjavik";
-    private static City city = City.getCity();
-    private static Country country = Country.getCountry();
+    private City city = City.getCity();
+    private Country country = Country.getCountry();
     private CountryDao countryDao = CountryDao.getInstance();
 
     public static CityJsonObject createJsonObject() {
@@ -26,13 +24,16 @@ public class CityJsonHelper {
                 .build();
     }
 
-    public static CityJsonObject changeCityNameAndPostIndex(){
+    public static CityJsonObject changeCityNameAndPostIndex() {
+        String postIndex = "3639892";
+        String cityName = "Reykjavik";
         city.setPostIndex(postIndex);
         city.setCityNameEn(cityName);
         return CityJsonObject.builder()
                 .postIndex(city.getPostIndex())
                 .countryId(city.getCountry().getId())
-                .countryName(city.getCityNameEn())
+                .countryName(city.getCountry().getCountryNameRu())
+                .cityName(city.getCityNameEn())
                 .visibility(city.getVisibility())
                 .build();
     }

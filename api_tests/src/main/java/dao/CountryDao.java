@@ -20,7 +20,7 @@ public class CountryDao {
     private static final CountryDao INSTANCE = new CountryDao();
     private static final String GET_ALL = "SELECT * FROM country";
     private static final String DELETE = "DELETE FROM country WHERE id = ?";
-    private static final String GET_BY_ID = "SELECT * " + "FROM country " + "WHERE id = ?";
+    private static final String GET_BY_ID = "SELECT * FROM country WHERE id = ?";
     private static final String SAVE = "INSERT INTO country(country_code_2,country_code_3,country_name_ru,country_name_en) VALUES(?,?,?,?)";
 
     @SneakyThrows
