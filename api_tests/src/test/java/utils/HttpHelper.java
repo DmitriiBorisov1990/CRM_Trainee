@@ -5,7 +5,6 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import lombok.experimental.UtilityClass;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 
-@UtilityClass
+
 public class HttpHelper {
 
     private static Map<String, String> requestHeaderFieldPutKey(String key, String value) {

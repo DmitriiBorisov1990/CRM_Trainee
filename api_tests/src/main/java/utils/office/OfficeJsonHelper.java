@@ -1,24 +1,30 @@
 package utils.office;
 
-import controllers.location_controller.city.CityJsonObject;
 import controllers.location_controller.office.OfficeJsonObject;
-import dao.CityDao;
 import entity.Office;
-import utils.city.CityJsonHelper;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class OfficeJsonHelper {
 
     private static Office office = Office.getOffice();
-    private static CityDao cityDao = CityDao.getInstance();
 
-    public static OfficeJsonObject createJsonObject(){
-        CityJsonObject jsonObject = CityJsonHelper.createJsonObject();
-        int cityId = cityDao.getCityIdByCityIndex(jsonObject.getPostIndex());
+    public static OfficeJsonObject createJsonObject(int cityId) {
         return OfficeJsonObject.builder()
                 .cityId(cityId)
                 .location(office.getLocation())
                 .visibility(office.getVisibility())
                 .build();
+    }
 
+    public static OfficeJsonObject updateOfficeLocation(OfficeJsonObject office){
+        office.setLocation("Pobedy 12");
+        return OfficeJsonObject.builder()
+                .id(office.getId())
+                .cityId(office.getCityId())
+                .cityName(office.getCityName())
+                .location(office.getLocation())
+                .visibility(office.getVisibility())
+                .build();
     }
 }

@@ -10,6 +10,7 @@ import transaction.ConnectionManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class CityDao {
             "ON ci.country_id  = co.id " +
             "WHERE ci.id = ?";
     private static final String SAVE_CITY = "INSERT INTO city(post_index, country_id, city_name_ru, city_name_en, visibility) VALUES(?,?,?,?,?)";
-    private static final String GET_CITY_ID_BY_INDEX = "SELECT id FROM city WHERE post_index = ?";
+    //private static final String GET_CITY_ID_BY_INDEX = "SELECT id FROM city WHERE post_index = ?";
 
     @SneakyThrows
     public City getOne(int id) {
@@ -95,8 +96,6 @@ public class CityDao {
     public City saveCity(City city) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_CITY, RETURN_GENERATED_KEYS)) {
-            Country country = countryDao.saveCountry(Country.getCountry());
-            city.setCountry(country);
             preparedStatement.setString(1, city.getPostIndex());
             preparedStatement.setObject(2, city.getCountry().getId());
             preparedStatement.setString(3, city.getCityNameRu());
@@ -125,7 +124,8 @@ public class CityDao {
         return result;
     }
 
-    @SneakyThrows
+    //TODO
+    /*@SneakyThrows
     public int getCityIdByCityIndex(String postIndex) {
         int id = 0;
         try (Connection connection = ConnectionManager.get();
@@ -137,21 +137,20 @@ public class CityDao {
             }
         }
         return id;
-    }
+    }*/
 
     //TODO
-    /*@SneakyThrows
+    @SneakyThrows
     public void testM() {
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement("BEGIN " +
-                     "INSERT INTO country(country_code_2,country_code_3,country_name_ru,country_name_en)" +
-                     "  VALUES('TE', 'TES','TEST','TEST') " +
-                     "INSERT INTO city (post_index,country_id,city_name_ru,city_name_en,visibility) " +
-                     "  VALUES('123456',LAST_INSERT_ID(),'test_ru', 'test_en','1'); " +
-                     "COMMIT;")) {
-            preparedStatement.executeUpdate();
+        try (Connection connection = ConnectionManager.get()) {
+            Statement statement = connection.createStatement();
+            statement.addBatch("START TRANSACTION ");
+            statement.addBatch(" INSERT INTO country(country_code_2,country_code_3,country_name_ru,country_name_en) VALUES('TE', 'TES','TEST','TEST' " +
+                    "INSERT INTO city(country_id,post_index,city_name_ru,city_name_en,visibility) VALUES(LAST_INSERT_ID(),'123456','test_ru', 'test_en','1');");
+            statement.addBatch("COMMIT;");
+            statement.executeBatch();
         }
-    }*/
+    }
 
     public static CityDao getInstance() {
         return INSTANCE;

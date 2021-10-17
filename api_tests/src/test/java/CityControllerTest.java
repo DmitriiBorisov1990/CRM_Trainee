@@ -19,7 +19,7 @@ public class CityControllerTest extends BaseTest {
 
     private static int cityId;
     private static int countryId;
-    private static CityJsonObject expectedResult = null;
+    private static CityJsonObject expectedResult;
     private static final CityDao cityDao = CityDao.getInstance();
     private static final CountryDao countryDao = CountryDao.getInstance();
     private static final String ADD_NEW_CITY = "/api/location/city?lang=en";
@@ -53,15 +53,15 @@ public class CityControllerTest extends BaseTest {
         countryId = actualResult.getCountryId();
         expectedResult.setId(cityId);
         expectedResult.setCountryName(actualResult.getCountryName());
-        Assert.assertEquals(expectedResult, actualResult);
+        assertThat(expectedResult, is(actualResult));
     }
 
-    @Test(priority = 2,description = "C5670710 Получение данных о городе по ID как РОС админ")
+    @Test(priority = 2, description = "C5670710 Получение данных о городе по ID как РОС админ")
     static void getCityByIdTest() {
         CityJsonObject actualResult = HttpHelper
-                .getMethodByPath(REQUEST_URL,GET_CITY_BY_ID,"id",JSON,cityId,200,CityJsonObject.class);
+                .getMethodByPath(REQUEST_URL, GET_CITY_BY_ID, "id", JSON, cityId, 200, CityJsonObject.class);
         expectedResult.setCountryName(actualResult.getCountryName());
-        Assert.assertEquals(expectedResult,actualResult);
+        assertThat(expectedResult, is(actualResult));
     }
 
 
@@ -69,10 +69,10 @@ public class CityControllerTest extends BaseTest {
     static void updateCityTest() {
         expectedResult = CityJsonHelper.changeCityNameAndPostIndex();
         CityJsonObject actualResult = HttpHelper
-                .putMethodUpdateById(REQUEST_URL,UPDATE_CITY_BY_ID,JsonObjectHelper.generateObjectToJsonString(expectedResult),"id",JSON,cityId,200,CityJsonObject.class);
+                .putMethodUpdateById(REQUEST_URL, UPDATE_CITY_BY_ID, JsonObjectHelper.generateObjectToJsonString(expectedResult), "id", JSON, cityId, 200, CityJsonObject.class);
         expectedResult.setId(actualResult.getId());
         expectedResult.setCountryName(actualResult.getCountryName());
-        assertThat(expectedResult,is(actualResult));
+        assertThat(expectedResult, is(actualResult));
     }
 
     @Test(priority = 4, description = "C5670711 Удаление города от имени РОС-администратора")
@@ -81,4 +81,20 @@ public class CityControllerTest extends BaseTest {
         countryDao.deleteCountry(countryId);
         Assert.assertNull(cityDao.getOne(cityId));
     }
+
+    /*@Test
+    static void saveTest() {
+        Country country = Country.getCountry();
+        countryDao.saveCountry(country);
+        City city = City.getCity();
+        City saveCity = City.builder()
+                .postIndex(city.getPostIndex())
+                .country(country)
+                .cityNameRu(city.getCityNameRu())
+                .cityNameEn(city.getCityNameEn())
+                .visibility(city.getVisibility())
+                .build();
+        cityDao.saveCity(saveCity);
+        cityDao.testM();
+    }*/
 }

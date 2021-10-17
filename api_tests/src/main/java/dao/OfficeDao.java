@@ -19,14 +19,23 @@ public class OfficeDao {
 
     private static final OfficeDao INSTANCE = new OfficeDao();
     private static final String GET_ALL_OFFICE = "SELECT o.id, o.location, o.visibility, " +
-                               "c.id, c.post_index, c.city_name_ru, c.city_name_en, c.visibility, " +
-                                "co.id, co.country_code_2, co.country_code_3, co.country_name_ru, co.country_name_en, co.visibility " +
-                        "FROM dev_crmreq_t.office o " +
-                        "LEFT JOIN dev_crmreq_t.city c " +
-                        "ON o.city_id = c.id " +
-                        "JOIN dev_crmreq_t.country co " +
-                        "ON c.country_id  = co.id " +
-                        "ORDER BY o.id";
+            "c.id, c.post_index, c.city_name_ru, c.city_name_en, c.visibility, " +
+            "co.id, co.country_code_2, co.country_code_3, co.country_name_ru, co.country_name_en, co.visibility " +
+            "FROM office o " +
+            "LEFT JOIN city c " +
+            "ON o.city_id = c.id " +
+            "JOIN country co " +
+            "ON c.country_id  = co.id " +
+            "ORDER BY o.id";
+    private static final String GET_OFFICE_BY_ID = "SELECT o.id, o.location, o.visibility, " +
+            "c.id, c.post_index, c.city_name_ru, c.city_name_en, c.visibility, " +
+            "co.id, co.country_code_2, co.country_code_3, co.country_name_ru, co.country_name_en, co.visibility " +
+            "FROM office o " +
+            "LEFT JOIN city c " +
+            "ON o.city_id = c.id " +
+            "JOIN country co " +
+            "ON c.country_id  = co.id " +
+            "WHERE o.id = ?";
 
 
     @SneakyThrows
@@ -60,6 +69,40 @@ public class OfficeDao {
             }
         }
         return officeList;
+    }
+
+    //TODO
+    @SneakyThrows
+    public Office getOne(int id) {
+        Office office = null;
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_OFFICE_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                office = Office.builder()
+                        .id(resultSet.getInt("o.id"))
+                        .city(City.builder()
+                                .id(resultSet.getInt("c.id"))
+                                .postIndex(resultSet.getString("c.post_index"))
+                                .country(Country.builder()
+                                        .id(resultSet.getInt("co.id"))
+                                        .countryCode2(resultSet.getString("co.country_code_2"))
+                                        .countryCode3(resultSet.getString("co.country_code_3"))
+                                        .countryNameRu(resultSet.getString("co.country_name_ru"))
+                                        .countryNameEn(resultSet.getString("co.country_name_en"))
+                                        .visibility(resultSet.getBoolean("co.visibility"))
+                                        .build())
+                                .cityNameRu(resultSet.getString("c.city_name_ru"))
+                                .cityNameEn(resultSet.getString("c.city_name_en"))
+                                .visibility(resultSet.getBoolean("c.visibility"))
+                                .build())
+                        .location(resultSet.getString("o.location"))
+                        .visibility(resultSet.getBoolean("o.visibility"))
+                        .build();
+            }
+        }
+        return office;
     }
 
     public static OfficeDao getInstance() {

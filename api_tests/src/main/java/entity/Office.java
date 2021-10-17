@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class Office {
 
     private Integer id;
-    private City city;
-    private String location = "TEST AUTOMATION";
+    private City city = City.getCity();
+    private String location = "Zodchego 14";
     private Boolean visibility = true;
     private static Office office = new Office();
 
